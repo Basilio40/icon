@@ -8,7 +8,7 @@ from objetivos.utils import calcula_campos_dinamicos
 from dre.models import Dre
 from objetivos.models import *
 from swot.models import *
-from .utils import calcula_smile_points
+from .utils import *
 from swot.utils import calcula_competitividade
 
 # Create your views here.
@@ -470,31 +470,23 @@ def diagnostico_amb_ext(request, user):
         except:
             pass
 
-    owner = get_object_or_404(User, username=user)
     concorrentes = Concorrente.objects.filter(user=owner)
+    clientes = Cliente.objects.filter(user=owner)
+    fornecedores = Fornecedor.objects.filter(user=owner)
+
     analise = AnaliseConcorrencia.objects.get_or_create(user=owner)[0]
 
-    competitividade = {'preco': 0, 'qualidade': 0, 'entrega': 0, 'inovacao': 0, 'portifolio': 0}
-    for concorrente in concorrentes:
-        competitividade['preco'] += calcula_competitividade(concorrente.preco)
-        competitividade['qualidade'] += calcula_competitividade(concorrente.qualidade)
-        competitividade['entrega'] += calcula_competitividade(concorrente.entrega)
-        competitividade['inovacao'] += calcula_competitividade(concorrente.inovacao)
-        competitividade['portifolio'] += calcula_competitividade(concorrente.portifolio)
-    competitividade_media = 0.0
-    for i in competitividade:
-        try:
-            competitividade[i] = (competitividade[i] / (len(concorrentes)*2))*100
-            competitividade_media += competitividade[i]
-        except:
-            pass
-    competitividade_media = competitividade_media / 5
+    concorrentes_p = pontuacao_ext_concorrentes(concorrentes)
+    clientes_p = pontuacao_ext_clientes(clientes)
+    fornecedor_p = pontuacao_ext_fornecedor(fornecedores)
 
     porcentagem_sobrevivencia = len(respostas) * (30/len(questoes))
     if pontos_respostas > 0:
         porcentagem_sobrevivencia += pontos_respostas * (70/len(questoes))
     dicio_retorno = {'porcentagem_sobrevivencia': int(porcentagem_sobrevivencia),
-                     'concorrencia': competitividade_media}
+                     'concorrencia': concorrentes_p,
+                     'clientes': clientes_p,
+                     'fornecedores': fornecedor_p}
     return render(request, 'graficos/diagnostico_amb_ext.html', dicio_retorno)
 
 @login_required
