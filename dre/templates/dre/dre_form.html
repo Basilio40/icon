@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1>{{ title }}</h1>
+            <hr>
+
+            <form action="." method="post" class="form">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.ano_exercicio | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.receita_servico | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.receita_produto | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.outras_receitas | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.deducoes_receitas | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.imposto_sobre_receitas | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.custo_fixo | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.custo_fixo_folha | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.custo_fixo_material | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.despesas_operacionais | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.despesas_folha | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.depreciacao_amortizacao | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.equivalente_patrimonial | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.despesas_nao_operacionais | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.restituicao_correcao_monetaria | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.endividamento | as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    {{ form.inadimplencia | as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </form>
+            <hr>
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
+
+{% endblock content %}

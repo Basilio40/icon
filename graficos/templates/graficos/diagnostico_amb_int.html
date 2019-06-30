@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<hr>
+<br>
+        <div class="btn-group mr-2">
+             <a href="{% url 'graficos:diagnostico_amb_ext' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+             <a href="{% url 'objetivos:analise_desempenho_financeiro' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+          </div>
+<br>
+<br>
+<div class="container">
+        <div class="row">
+         <div class="col-16">
+         <div class="card">
+         <div class="card-body bg-secondary text-white">
+                        <h2 class="text-center">Diagnóstico de Ambiente Interno</h2>
+                    </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="card-columns">
+                                        <div class="card border-light">
+                                            <div id="chart_div1"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'objetivos:analise_desempenho_financeiro' user=request.user %}"><button class="btn  btn-primary shadow  mb-5  rounded" style="width: 200px;"><h4>Financeiro</h4></button></a>
+                                            </div>
+                                        </div>
+                         <div class="container">
+                                <div class="col-8">
+                                    <div class="card-columns">
+                                        <div class="card border-light">
+                                            <div id="chart_div2"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'vendas:analise_desempenho_vendas' user=request.user %}"><button class="btn  btn-primary  shadow  mb-5 rounded" style="width: 200px;"><h4>Vendas</h4></button></a>
+                                            </div>
+                                        </div>
+
+                        <div class="container"style="margin-left:210px;">
+                                <div class="col-8">
+                                    <div class="card-columns">
+                                        <div class="card border-light">
+                                            <div id="chart_div3"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'processos_produtivo:analise_desemp_processos_produtivos' user=request.user %}"><button class="btn  btn-primary  shadow  mb-5  rounded" style="width: 200px;"><h4>Processos</h4></button></a>
+                                            </div>
+                                        </div>
+                        <div class="container">
+                                <div class="col-8">
+                                    <div class="card-columns" style="margin-left:220px;">
+                                        <div class="card border-light">
+                                            <div id="chart_div4"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'pessoa:analise_desempenho_pessoas' user=request.user %}"><button class="btn  btn-primary  shadow  mb-5  rounded" style="width: 200px;"><h4>Pessoas</h4></button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', {{porcentagem_financeiro}}],
+        ]);
+
+        var options = {
+          width: 250, height: 250,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
+
+        chart.draw(data, options);
+
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 250, height: 250,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
+        chart.draw(data, options);
+
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 250, height: 250,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div3'));
+
+        chart.draw(data, options);
+
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 250, height: 250,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div4'));
+
+        chart.draw(data, options);
+
+      }
+    </script>
+
+{% endblock extras_js %}

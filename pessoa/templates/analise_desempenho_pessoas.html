@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'pessoa:painel_desempenho_pessoas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Inserir Dados</button></a>
+	<a href="{% url 'pessoa:dashboard_pessoas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button>
+	<a href="{% url 'pessoa:multi_pessoas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Análises</button>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+
+<br>
+<br>
+<div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Análise de Desempenho Pessoas</h2>
+                    </div>
+                <table class="table">
+                        <thead class="bg-dark" style="color:white">
+                          <tr>
+                            <th>Analise </th>
+                            <th>Resultado</th>
+                            <th>Classificação </th>
+                          </tr>
+                        </thead>
+                    <thead class="bg-light">
+                    <th >Competências</th>
+                    <th ></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>Nível de Competências</td>
+                        <td>&nbsp;</td>
+                              <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="nivel_competencias" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.carteira_de_clientes_ativa == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.carteira_de_clientes_ativa == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.carteira_de_clientes_ativa == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                              </td>
+                          </tr>
+                    </tbody>
+                        <tbody>
+                        <thead class="bg-light">
+                      <th >Engajamento</th>
+                        <th ></th>
+                        <th ></th>
+                      </thead>
+                          <tr>
+                            <td>% Absenteísmo</td>
+                            {% for absenteismo, ano in pessoas.absenteismo %}
+                             <td> {{ absenteismo | floatformat:2 }} %</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="absenteismo" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.absenteismo == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.absenteismo == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.absenteismo == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Nível de Engajamento</td>
+                            <td>&nbsp;</td>
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="engajamento" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody>
+                        <thead class="bg-light" >
+                      <th>Retenção</th>
+                        <th></th>
+                        <th></th>
+                      </thead>
+
+                          <tr>
+                            <td>% Funcionários + 12 meses</td>
+                            {% for funcionarios_antigos, ano in pessoas.funcionarios_antigos %}
+                             <td> {{ funcionarios_antigos | floatformat }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="funcionarios_antigos" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.funcionarios_antigos == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.funcionarios_antigos == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.funcionarios_antigos == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                            <td>% Rotatividade</td>
+                            {% for rotatividade, ano in pessoas.rotatividade %}
+                             <td> {{ rotatividade | floatformat:2 }} %</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="rotatividade" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.rotatividade == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.rotatividade == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.rotatividade == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <td>Nível de Retenção</td>
+                            <td>&nbsp;</td>
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="retencao" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+
+                            </td>
+                          </tr>
+
+                        </tbody>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+
+{% endblock content %}
+
+{% block extras_js %}
+
+<script type="text/javascript">
+function atualiza_smiles(sel){
+  var k = sel.id;
+  var v = sel.options[sel.selectedIndex].value;
+  var data = {
+    'key': k,
+    'v': v,
+    'ano': {{avaliacao.pessoas.ano_exercicio | unlocalize}},
+  };
+  $.ajax({
+    type: "POST",
+    url: './salvar/',
+    data: data
+  });
+}
+</script>
+{% endblock  %}

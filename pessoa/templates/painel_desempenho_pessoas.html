@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'pessoa:analise_desempenho_pessoas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Análise</button></a>
+    <a href="{% url 'pessoa:dashboard_pessoas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<br>
+<br>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-secondary text-white">
+                        <h2 class="text-center">PAINEL DE DESEMPENHO DE PESSOAS</h2>
+                     </div>
+    <table  class="table table-responsive " id="dataTable" page-data-size="9" >
+
+              <table  class="table table-responsive "  >
+        <thead>
+        <tr >
+            <th class="col-md-auto">
+                {% for ano_exercicio, ano in pessoas.ano_exercicio %}
+                <th><div class="table-responsive">
+                    <a href="/pessoas/{{request.user}}/{{ano | unlocalize}}">
+                    <span><input type="text" class="form-control" placeholder="{{ ano_exercicio   | unlocalize}}" readonly><a href="#" data-original-title="editar"></span>
+                    </a>
+                </div></th>
+
+                {% endfor %}
+            <tr>
+                <td>% Funcionários + 12 meses</td>
+                {% for funcionarios_antigos, ano in pessoas.funcionarios_antigos %}
+                <td><input id="funcionarios_antigos{{ano | unlocalize}}" oninput="pessoas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ funcionarios_antigos| floatformat:2 }}"></td>
+                {% endfor %}
+             </tr>
+            <tr>
+                <td>% Rotatividade</td>
+                {% for rotatividade, ano in pessoas.rotatividade %}
+                <td><input id="rotatividade{{ano | unlocalize}}" oninput="pessoas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ rotatividade | floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>% Absenteísmo</td>
+                {% for absenteismo, ano in pessoas.absenteismo %}
+                <td><input id="absenteismo{{ano | unlocalize}}" oninput="pessoas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ absenteismo| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+
+
+
+                <td class="text-white">___________________________________________________________________________________________</td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+
+
+    </table>
+</div>
+
+<script type="text/javascript">
+              function dre_update(ano){
+    console.log(ano+' foi modificado.');
+    var ano_modificado = document.getElementById(ano);
+    ano_modificado.innerHTML = '<button type="button" onclick="save_vendas_update('+ano+')" class="btn btn-success">' + ano + ' - Salvar' + '</button>';
+  };
+  function save_vendas_update(ano){
+    var data = {};
+    fields = ['ano_exercicio' ,
+                'carteira_de_clientes_ativa' ,
+                'novos_clientes_no_ano' ,
+                'propostas_enviadas_no_ano' ,
+                'notas_fiscais_emitidas',
+                'clientes_fidelizados' ,
+                'reclamacoes_clientes' ,
+                'clientes_perdidos' ,];
+    for (field of fields) {
+      str = document.getElementById(field+'_'+ano).value;
+      str = str.replace("R$ ", "");
+      str = str.replace("R$", "");
+      str = str.split('.').join("");
+      str = str.replace(",", ".");
+      console.log(field+"_"+ano);
+      data[field] = str;
+    };
+    $.ajax({
+      type: "POST",
+      url: './api/'+ano+'/',
+      data: data,
+      success: location.reload(true),
+    });
+  };
+
+</script>
+
+{% endblock content %}
+{% block extras_js%}
+<script>
+        $( ".moeda" ).keyup(function(event) {
+          if(event.which >= 37 && event.which <= 40){
+            event.preventDefault();
+          }
+
+          $(this).val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+              .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+            ;
+          });
+        });
+</script>
+{% endblock extras_js %}

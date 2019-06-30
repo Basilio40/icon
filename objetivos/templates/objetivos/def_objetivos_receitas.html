@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+
+<!--Navegação-->
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'graficos:ped_desempenho' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+    <a href="{% url 'objetivos:objetivo_de_rentabilidade' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+    <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+<div class="container">
+      <div class="row">
+          <div class="col-12">
+              <div class="card">
+                    <div class="card-header bg-info text-white">
+                      <h2 class="text-center">Definindo objetivos de Receitas</h2>
+                        <div class="card-header bg-info text-white">
+                        <select class="selectpicker form-control form-control-lg">
+                     <option data-content="<h5>Crescimento Sustentavel da Receita </h5>"></option>
+                       <option data-content="<h5>Manutenção da Receita<h5>"></option>
+                       <option data-content="<h5>Outros ...<h5>"></option>
+                   </select>
+                   </div>
+                  </div>
+<div class="bg"id="wrapper" style="min-height: 575px;">
+      <div class="row">
+          <div class="col-lg-4 text-center">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+              <div class="card-body">
+                      <div class="specpanel stats">
+                          <div class="panel-body h-200">
+                              <div class="stats-icon pull-right">
+                                  <i class="fa fa-line-chart fa-2x"></i>
+                              </div>
+                              <div class="m-t-xl">
+                                <span class="font-bold no-margins" style="text-transform:uppercase; font-size:22px;">
+                                  Defina o percentual de aumento de receita
+                                </span>
+                                <br>
+                                <br>
+                                <div align=center>
+                                  <input type="number" class="form-control" id="receita_estimada" oninput="update_receita_estimada()" value="{{objetivo_atual | floatformat:0}}" placeholder="Aumento de Receita" style="width: 90%; display: inline; text-align: center;"> %
+
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 text-center">
+            <div class=" bg-transparent border-light ">
+              <div class="card-body">
+                      <div class="specpanel stats">
+                          <div class="panel-body h-200">
+                              <div class="stats-icon pull-right">
+                              </div>
+                              <div class="m-t-xl">
+                           <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+
+                          </span>
+                                  <h3 class="no-margins font-extra-bold text-success" style="font-size:45px; color:#a94442;"></h3>
+
+                                  <br>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 text-center">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+              <div class="card-body">
+                      <div class="specpanel stats">
+                          <div class="panel-body h-200">
+                              <div class="stats-icon pull-right">
+                                  <i class="fa fa-line-chart fa-2x"></i>
+                              </div>
+                              <div class="m-t-xl">
+                           <span class="font-bold no-margins" style="text-transform:uppercase; font-size:22px;">
+                              Veja como ficou a meta de Receita
+                          </span>
+                                  <h3 id="receita_atualizada" class="no-margins font-extra-bold text-success" style="font-size:33px; color:#a94442;">R$ {{ receita_ | floatformat:2 }}</h3>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+            </div>
+          </div>
+
+  <div class="container">
+      <div class="card-responsive col-lg-12 text-center "">
+          <div class="card-responsive card shadow-lg p-2 mb-5 rounded">
+                  <div class="overflow-auto">
+                    <div class="sticky-top">
+                          <br>
+
+   <table class="table table-responsive">
+    <thead class="thead-dark col-lg-8">
+      <tr>
+        <th scope="col-lg-4">Análise de Receita</th>
+        <th scope="col-lg-4">Resultado</th>
+        <th scope="col-lg-4">Análise </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A Receita Bruta no ultimo ano </td>
+        <td>R$ {{ receita | floatformat:2 }}</td>
+        <td>
+          <select onchange="update_receita_estimada()" id="smile_receita_bruta" class="selectpicker col-lg-8">
+            {% for smile in smiles.smile_receita_bruta %}
+              {{smile|safe}}
+            {% endfor %}
+          </select>
+        </td>
+
+      </tr>
+      <tr>
+        <td class="text-center">O crescimento dos últimos 4 anos </td>
+        <td>R$ {{crescimento_quatro|floatformat:2}}</td>
+        <td>
+          <select onchange="update_receita_estimada()" id="smile_crescimento_quatro" class="selectpicker col-lg-8">
+            {% for smile in smiles.smile_crescimento_quatro %}
+              {{smile|safe}}
+            {% endfor %}
+        </select>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-center">O crescimento da receita </td>
+        <td>{{ crescimento | floatformat:2 }} %</td>
+        <td>
+            <select onchange="update_receita_estimada()" id="smile_crescimento" class="selectpicker col-lg-8">
+              {% for smile in smiles.smile_crescimento %}
+                {{smile|safe}}
+              {% endfor %}
+            </select>
+        </td>
+      </tr>
+       <tr>
+        <td style="color:white">_____________________________________________________________________________</td>
+        <td style="color:white">_________________________________________</td>
+        <td style="color:white">__________________________</td>
+      </tr>
+    </tbody>
+  </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function update_receita_estimada(){
+    // Campos de leitura
+    var selector = document.getElementById("receita_estimada");
+    var smile_receita_bruta = document.getElementById("smile_receita_bruta");
+    var smile_crescimento_quatro = document.getElementById("smile_crescimento_quatro");
+    var smile_crescimento = document.getElementById("smile_crescimento");
+    // Campos de atualização
+    var receita_id = document.getElementById("receita_atualizada");
+
+    var data = {};
+    data['percentage'] = 1.0 + parseFloat(selector.value) / 100;
+    data['smile_receita_bruta'] = smile_receita_bruta.options[smile_receita_bruta.selectedIndex].value;
+    data['smile_crescimento_quatro'] = smile_crescimento_quatro.options[smile_crescimento_quatro.selectedIndex].value;
+    data['smile_crescimento'] = smile_crescimento.options[smile_crescimento.selectedIndex].value;
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+
+    nova_receita = (1.0 + parseFloat(selector.value)/100) * {{receita|unlocalize}};
+    receita_id.innerHTML =nova_receita.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });;
+  };
+</script>
+{% endblock extras_js %}

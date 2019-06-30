@@ -1,0 +1,785 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+  <a href="{% url 'swot:swot_clientes' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+   <a href="{% url 'swot:swot_macro' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+  <a href="{% url 'graficos:diagnostico_amb_ext' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+<!--Formulario-->
+<div class="container">
+  <div class="row">
+      <div class="col-12">
+          <div class="card">
+              <div class="overflow-auto">
+                <div class="card-header bg-secondary text-white">
+                  <h2 class="text-center">Análise de Fornecedores</h2>
+               </div>
+<table class="table table-responsive">
+<thead class="thead bg-secondary">
+  <tr>
+    <th scope="col" class="text-white">FORNECEDORES</th>
+    <th scope="col-sm-2" class="text-white">PREÇO</th>
+    <th scope="col-sm-2" class="text-white">QUALIDADE </th>
+    <th scope="col-sm-2" class="text-white">ENTREGA </th>
+    <th scope="col-sm-2" class="text-white">INOVAÇÃO </th>
+    <th scope="col-sm-2" class="text-white">PORTIFOLIO </th>
+  </tr>
+</thead>
+<tbody>
+  {% for fornecedor in fornecedores %}
+  <tr>
+    <td><input type="text" id="fornecedor_{{fornecedor.pk}}" onchange="alterar_nome_fornecedor({{fornecedor.pk}})" class="form-control" value="{{fornecedor.fornecedor}}"></td>
+    <td>
+      <select class="custom-select" onchange="update_fornecedor({{fornecedor.pk}})" id="{{fornecedor.pk}}_preco">
+        {% for opcao in opcoes_fornecedores %}
+          {% if opcao == fornecedor.preco %}
+          <option selected><b>{{opcao}}</b></option>
+          {% else %}
+          <option><b>{{opcao}}</b></option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="custom-select" onchange="update_fornecedor({{fornecedor.pk}})" id="{{fornecedor.pk}}_qualidade">
+        {% for opcao in opcoes_fornecedores %}
+          {% if opcao == fornecedor.qualidade %}
+          <option selected><b>{{opcao}}</b></option>
+          {% else %}
+          <option><b>{{opcao}}</b></option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="custom-select" onchange="update_fornecedor({{fornecedor.pk}})" id="{{fornecedor.pk}}_entrega">
+        {% for opcao in opcoes_fornecedores %}
+          {% if opcao == fornecedor.entrega %}
+          <option selected><b>{{opcao}}</b></option>
+          {% else %}
+          <option><b>{{opcao}}</b></option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="custom-select" onchange="update_fornecedor({{fornecedor.pk}})" id="{{fornecedor.pk}}_inovacao">
+        {% for opcao in opcoes_fornecedores %}
+          {% if opcao == fornecedor.inovacao %}
+          <option selected><b>{{opcao}}</b></option>
+          {% else %}
+          <option><b>{{opcao}}</b></option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="custom-select" onchange="update_fornecedor({{fornecedor.pk}})" id="{{fornecedor.pk}}_portifolio">
+        {% for opcao in opcoes_fornecedores %}
+          {% if opcao == fornecedor.portifolio %}
+          <option selected><b>{{opcao}}</b></option>
+          {% else %}
+          <option><b>{{opcao}}</b></option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+  </tr>
+  {% endfor %}
+  <td></td>
+    <td style="color:White;">_______________________</td>
+    <td style="color:White;">_______________________</td>
+    <td style="color:White;">_______________________</td>
+    <td style="color:White;">_______________________</td>
+    <td style="color:White;">_______________________</td>
+  <tr>
+    <td class="bg-warning font-weight-bold">Competitividade</td>
+    <td class="bg-warning font-weight-bold" id="c0">{{competitividade.preco|floatformat:2}} %</td>
+    <td class="bg-warning font-weight-bold" id="c1">{{competitividade.qualidade|floatformat:2}} %</td>
+    <td class="bg-warning font-weight-bold" id="c2">{{competitividade.entrega|floatformat:2}} %</td>
+    <td class="bg-warning font-weight-bold" id="c3">{{competitividade.inovacao|floatformat:2}} %</td>
+    <td class="bg-warning font-weight-bold" id="c4">{{competitividade.portifolio|floatformat:2}} %</td>
+  </tr>
+  <tr>
+    <td class="bg-warning font-weight-bold"></td>
+    <td class="bg-warning font-weight-bold"></td>
+    <td class="bg-warning font-weight-bold"></td>
+    <td class="bg-warning font-weight-bold"></td>
+    <td class="bg-warning font-weight-bold">Seu nível de competitividade final:</td>
+    <td class="bg-warning font-weight-bold" id="ctotal"><h5>{{competitividade.media|floatformat:2}} %</h5></td>
+  </tr>
+  <tr>
+<!--SWOT-->
+</tbody>
+</table>
+<table class="table table-responsive">
+<thead class="thead bg-primary">
+  <tr>
+    <th scope="col"class="text-white">Oportunidades</th>
+    <th scope="col"class="text-white">
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+      A
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal1">Legenda</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Atratividade da Oportunidade
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+          </div>
+        </div>
+      </div>
+    </th>
+    <th scope="col"class="text-white">
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalswot1">
+      PS
+    </button>
+    <div class="modal fade" id="modalswot1" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalswot1">Legenda</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Probabilidade de Sucesso da Oportunidade
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+          </div>
+        </div>
+      </div>
+    </th>
+    <th scope="col"class="text-white">Ameaças</th>
+    <th scope="col"class="text-white">
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalswot2">
+      R
+    </button>
+    <div class="modal fade" id="modalswot2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalswot2">Legenda</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Relevância da Ameaça
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+          </div>
+        </div>
+      </div>
+    </th>
+    <th scope="col"class="text-white">
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalswot3">
+      PO
+    </button>
+    <div class="modal fade" id="modalswot3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalswot3">Legenda</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Probabilidade de Ocorrer a Ameaça
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+          </div>
+        </div>
+      </div>
+    </th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="objetivo_1">
+        {% for choice in choices.objetivo_1 %}
+          {% if choice == analise.objetivo_1 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+    </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_1_atratividade">
+        {% if analise.objetivo_1_atratividade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_1_atratividade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_1_probabilidade">
+        {% if analise.objetivo_1_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_1_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="ameaca_1">
+        {% for choice in choices.ameaca_1 %}
+          {% if choice == analise.ameaca_1 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_1_relevancia">
+        {% if analise.ameaca_1_relevancia == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_1_relevancia == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_1_probabilidade">
+        {% if analise.ameaca_1_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_1_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="objetivo_2">
+        {% for choice in choices.objetivo_2 %}
+          {% if choice == analise.objetivo_2 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_2_atratividade">
+        {% if analise.objetivo_2_atratividade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_2_atratividade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_2_probabilidade">
+        {% if analise.objetivo_2_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_2_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="ameaca_2">
+        {% for choice in choices.ameaca_2 %}
+          {% if choice == analise.ameaca_2 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_2_relevancia">
+        {% if analise.ameaca_2_relevancia == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_2_relevancia == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_2_probabilidade">
+        {% if analise.ameaca_2_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_2_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="objetivo_3">
+        {% for choice in choices.objetivo_3 %}
+          {% if choice == analise.objetivo_3 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_3_atratividade">
+        {% if analise.objetivo_3_atratividade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_3_atratividade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_3_probabilidade">
+        {% if analise.objetivo_3_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_3_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="ameaca_3">
+        {% for choice in choices.ameaca_3 %}
+          {% if choice == analise.ameaca_3 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_3_relevancia">
+        {% if analise.ameaca_3_relevancia == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_3_relevancia == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_3_probabilidade">
+        {% if analise.ameaca_3_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_3_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="objetivo_4">
+        {% for choice in choices.objetivo_4 %}
+          {% if choice == analise.objetivo_4 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_4_atratividade">
+        {% if analise.objetivo_4_atratividade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_4_atratividade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_4_probabilidade">
+        {% if analise.objetivo_4_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_4_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="ameaca_4">
+        {% for choice in choices.ameaca_4 %}
+          {% if choice == analise.ameaca_4 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_4_relevancia">
+        {% if analise.ameaca_4_relevancia == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_4_relevancia == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_4_probabilidade">
+        {% if analise.ameaca_4_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_4_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="objetivo_5">
+        {% for choice in choices.objetivo_5 %}
+          {% if choice == analise.objetivo_5 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_5_atratividade">
+        {% if analise.objetivo_5_atratividade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_5_atratividade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="objetivo_5_probabilidade">
+        {% if analise.objetivo_5_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.objetivo_5_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="form-control border" onchange="update_receita_estimada()" id="ameaca_5">
+        {% for choice in choices.ameaca_5 %}
+          {% if choice == analise.ameaca_5 %}
+          <option onchange="update_receita_estimada()" selected>{{choice}}</option>
+          {% else %}
+          <option onchange="update_receita_estimada()">{{choice}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_5_relevancia">
+        {% if analise.ameaca_5_relevancia == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_5_relevancia == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+    <td>
+      <select class="selectpicker col-lg-12 col-sm-12" onchange="update_receita_estimada()" id="ameaca_5_probabilidade">
+        {% if analise.ameaca_5_probabilidade == 'Cima' %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" selected></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% elif analise.ameaca_5_probabilidade == 'Meio'%}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio" selected></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo"></option>
+        {% else %}
+        <option data-content="<i class='fa fa-arrow-up' style='font-size:28px;color:green'></i>" value="Cima" ></option>
+        <option data-content="<i class='fa fa-arrow-right' style='font-size:28px;color:#ffdf80'>" value="Meio"></option>
+        <option data-content="<i class='fa fa-arrow-down' style='font-size:28px;color:red'></i>" value="Baixo" selected></option>
+        {% endif %}
+      </select>
+    </td>
+  </tr>
+    <td style="color:White;">___________________________________________</td>
+    <td style="color:White;">_______________</td>
+    <td style="color:White;">_______________</td>
+    <td style="color:White;">_________________________________________</td>
+    <td style="color:White;">_______________</td>
+    <td style="color:White;">_______________</td>
+</tbody>
+</table>
+
+
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function atualizar_porcentagem(){
+    var final = [0,0,0,0,0];
+    var atributos = ['preco', 'qualidade', 'entrega', 'inovacao', 'portifolio'];
+    for (f=0; f < atributos.length; f++){
+      var este = 0;
+      for (i=1; i<={{fornecedores|length}}; i++){
+        var elemento = document.getElementById(i + '_' + atributos[f]);
+        var e = elemento.options[elemento.selectedIndex].value;
+        if (e == "Me Encanta"){
+          este = este + 2;
+        }
+        if (e == "Me Atende"){
+          este = este + 1;
+        }
+      }
+      final[f] += este;
+    }
+
+    function calcular(i){
+      return final[i]/(2*{{fornecedores|length}}) * 100;
+    }
+
+    var total = 0;
+    for (i = 0; i <= 4; i++){
+      total = total + calcular(i);
+      $("#c"+i).html((parseFloat(calcular(i)).toFixed(2) + ' %').replace('.', ','));
+    }
+    var media = (total/5);
+    $("#ctotal").html((parseFloat(media).toFixed(2) + ' %').replace('.', ','));
+  }
+
+  atualizar_porcentagem();
+
+  function update_fornecedor(pk){
+    atualizar_porcentagem();
+    var atributos = ['preco', 'qualidade', 'entrega', 'inovacao', 'portifolio'];
+    var data = {};
+    data['pk'] = pk;
+    for (atributo of atributos){
+      var elemento = document.getElementById(pk + '_' + atributo);
+      data[atributo] = elemento.options[elemento.selectedIndex].value;
+    };
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/concorrente/',
+      data: data
+    });
+  };
+  function update_receita_estimada(){
+    var data = {};
+    for (i of [1,2,3,4,5]){
+      objetivo = document.getElementById('objetivo_'+i);
+      data['objetivo_'+i] = objetivo.options[objetivo.selectedIndex].value;
+
+      objetivo_atratividade = document.getElementById('objetivo_'+i+'_atratividade');
+      data['objetivo_'+i+'_atratividade'] = objetivo_atratividade.options[objetivo_atratividade.selectedIndex].value;
+
+      objetivo_probabilidade = document.getElementById('objetivo_'+i+'_probabilidade');
+      data['objetivo_'+i+'_probabilidade'] = objetivo_probabilidade.options[objetivo_probabilidade.selectedIndex].value;
+
+      ameaca = document.getElementById('ameaca_'+i);
+      data['ameaca_'+i] = ameaca.options[ameaca.selectedIndex].value;
+
+      ameaca_relevancia = document.getElementById('ameaca_'+i+'_relevancia');
+      data['ameaca_'+i+'_relevancia'] = ameaca_relevancia.options[ameaca_relevancia.selectedIndex].value;
+
+      ameaca_probabilidade = document.getElementById('ameaca_'+i+'_probabilidade');
+      data['ameaca_'+i+'_probabilidade'] = ameaca_probabilidade.options[ameaca_probabilidade.selectedIndex].value;
+    };
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+    console.log(data);
+  };
+
+  function alterar_nome_fornecedor(pk){
+    var data = {};
+    data['pk'] = pk;
+    data['fornecedor'] = document.getElementById('fornecedor_' + pk).value;
+    $.ajax({
+      type: "POST",
+      url: './salvar_nome/',
+      data: data
+    });
+  };
+</script>
+{% endblock extras_js %}

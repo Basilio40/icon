@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<br>
+
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+	<a href="/dre/{{ request.user }}" class="href"><button type="button" class="btn btn-sm btn-outline-info">__DRE___</button></a>
+	<a href="{% url 'graficos:grafico_dre' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+	<a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+<hr>
+<div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Análise de Desempenho Financeiro</h2>
+                    </div>
+   <table class=" table">
+    	<thead class="bg-dark" style="color:white">
+    		<tr>
+    			<th scope="col">Análise </th>
+    			<th scope="col">Resultado</th>
+    			<th>Classificação</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<thead class="bg-info" style="color:white">
+			<th >Receitas</th>
+			<th scope="col"></th>
+      <th scope="col"></th>
+		</thead>
+    		<tr>
+    			<td>A Receita Bruta no último ano foi de</td>
+    			<td>R$ {{ receita_bruta | floatformat:2}}</td>
+    			<td scope="col">
+            <select onchange="update_receita_estimada()" id="smile_receita_bruta" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_receita_bruta %}
+                {{smile|safe}}
+              {% endfor %}
+            </select>
+    			</td>
+
+    		</tr>
+    		<tr>
+    			<td>O crescimento médio da receita nos últimos  anos foi de</td>
+    			<td>{{crescimento_quatro | floatformat:2}} %</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_crescimento_quatro" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_crescimento_quatro %}
+                {{smile|safe}}
+              {% endfor %}
+          </select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>O crescimento da receita no último ano comparado ao anterior foi de</td>
+    			<td>{{crescimento | floatformat:2}} %</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_crescimento" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_crescimento %}
+                {{smile|safe}}
+              {% endfor %}
+            </select>
+    			</td>
+
+    		</tr>
+
+    	</tbody>
+    	<tbody>
+    	<thead class="bg-info" style="color:white">
+			<th >Rentabilidade</th>
+			<th ></th>
+			<th ></th>
+		</thead>
+    		<tr>
+    			<td>O Lucro Líquido foi de</td>
+    			<td>R$ {{ lucro_liquido | floatformat:2 }}</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_lucro_liquido" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_lucro_liquido %}
+                {{smile|safe}}
+              {% endfor %}
+            </select>
+    			</td>
+
+    		</tr>
+    		<tr>
+    			<td>A rentabilidade média nos últimos 4 anos foi de</td>
+    			<td>{{ rentabilidade_media | floatformat:3 }} %</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_rentabilidade_media" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_rentabilidade_media %}
+                {{smile|safe}}
+              {% endfor %}
+          </select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>A rentabilidade no último ano foi de</td>
+    			<td>{{ rentabilidade | floatformat:2 }} %</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_rentabilidade_ultimo" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_rentabilidade_ultimo %}
+                {{smile|safe}}
+              {% endfor %}
+          </select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>A rentabilidade no último ano comparada com o ano anterior aumentou em </td>
+    			<td>{{ rentabilidade_comparada | floatformat:2 }} %</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_rentabilidade_comparada" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_rentabilidade_comparada %}
+                {{smile|safe}}
+              {% endfor %}
+          </select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>O EBITDA médio nos últimos anos foi de</td>
+    			<td>R$ {{ebitda_medio | floatformat:2}}</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_ebitda_medio" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_ebitda_medio %}
+                {{smile|safe}}
+              {% endfor %}
+          </select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>O EBITDA no último ano foi de </td>
+    			<td>R$ {{ebitda | floatformat:2}}</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_ebitda_ultimo" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_ebitda_ultimo %}
+                {{smile|safe}}
+              {% endfor %}
+          </select>
+    			</td>
+    		</tr>
+    	</tbody>
+    	<tbody>
+    	<thead class="bg-info" style="color:white">
+			<th>Custos</th>
+			<th></th>
+			<th></th>
+		</thead>
+    		<tr>
+    			<td>% que o custo fixo representa na receita líquida </td>
+    			<td>14 % </td>
+    			<td>
+    				<select class="selectpicker col-lg-9 col-sm-9">
+  						<option data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> "></option>
+  						<option data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> "></option>
+  						<option data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i>"></option>
+					</select>
+    			</td>
+
+    		</tr>
+    		<tr>
+    			<td>% que o custo de Folha representa na receita líquida</td>
+    			<td>24,5 % </td>
+    			<td>
+    				<select class="selectpicker col-lg-9 col-sm-9">
+  						<option data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> "></option>
+  						<option data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> "></option>
+  						<option data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i>"></option>
+					</select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>% do custo comercial representa na receita líquida</td>
+    			<td>5,9 % </td>
+    			<td>
+    				<select class="selectpicker col-lg-9 col-sm-9">
+  						<option data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> "></option>
+  						<option data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> "></option>
+  						<option data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i>"></option>
+					</select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>% do custo de materiais representa na receita líquida</td>
+    			<td> 17,4 % </td>
+    			<td>
+    				<select class="selectpicker col-lg-9 col-sm-9">
+  						<option data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i>"></option>
+  						<option data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> "></option>
+  						<option data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i>"></option>
+					</select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>% das despesas administrativas representam na receita líquida</td>
+    			<td> 8,5 % </td>
+    			<td>
+    				<select class="selectpicker col-lg-9 col-sm-9">
+  						<option data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> "></option>
+  						<option data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> "></option>
+  						<option data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i>"></option>
+					</select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>% que as despesas financeiras representam na receita líquida</td>
+    			<td> 7 % </td>
+    			<td>
+    				<select class="selectpicker col-lg-9 col-sm-9">
+  						<option data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> "></option>
+  						<option data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> "></option>
+  						<option data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i>"></option>
+					</select>
+    			</td>
+    		</tr>
+    	</tbody>
+    	<tbody>
+    	<thead class="bg-info" style="color:white">
+			<th >Dívidas</th>
+			<th></th>
+			<th></th>
+		</thead>
+    		<tr>
+    			<td>Valor da Dívida </td>
+    			<td>R$ {{divida|floatformat:2}}</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_divida" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_divida %}
+                {{smile|safe}}
+              {% endfor %}
+            </select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>Taxa Dívida/Lucro </td>
+    			<td>{{taxa|floatformat:2}}</td>
+    			<td>
+            <select onchange="update_receita_estimada()" id="smile_taxa_divida_lucro" class="selectpicker col-lg-10">
+              {% for smile in smiles.smile_taxa_divida_lucro %}
+                {{smile|safe}}
+              {% endfor %}
+            </select>
+    			</td>
+    		</tr>
+    	</tbody>
+    </table>
+    <br>
+    <br>
+		<a href="/dre/{{ request.user }}" class="href"><button type="button" class="btn btn-sm btn-info">Salvar</button></a>
+    <br>
+  </div>
+				</div>
+			</div>
+			</div>
+		</div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function update_receita_estimada(){
+    var data = {};
+
+    smiles = ['smile_lucro_liquido', 'smile_rentabilidade_media', 'smile_rentabilidade_ultimo',
+              'smile_rentabilidade_comparada', 'smile_ebitda_medio', 'smile_ebitda_ultimo',
+              'smile_receita_bruta', 'smile_crescimento_quatro', 'smile_crescimento',
+              'smile_divida', 'smile_taxa_divida_lucro'];
+    for (i of smiles){
+      console.log(i);
+      smile = document.getElementById(i);
+      data[i] = smile.options[smile.selectedIndex].value;
+    };
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+  };
+</script>
+{% endblock extras_js %}

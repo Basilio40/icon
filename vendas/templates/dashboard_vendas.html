@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'vendas:analise_desempenho_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Analise</button></a>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<br>
+<br>
+
+<!--Grafico-->
+  <div class="row">
+        <div class="col-sm-12">
+        </div>
+  </div>
+  <br>
+  <div class="col-lg-12">
+   <div class="content ">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="specpanel">
+                    <div class="panel-body">
+                        <div class="text-center">
+                    </div>
+                </div>
+            </div>
+         </div>
+     </div>
+</div>
+<div class="card-deck ">
+  <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+  <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-body ">
+      <canvas id="myChart1"></canvas>
+    </div>
+  </div>
+  <!--div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-body ">
+       <div id="myChart6"></div>
+    </div>
+  </div>
+  <div class="row">
+
+  </div-->
+
+
+    <!--script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options = {
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+                    <script>
+                        var ctx = document.getElementById("myChart6");
+                        var mixedChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                            labels:years = [1,2,3,4,5,6,7,8,9,10,11,12],
+
+                                datasets:[{
+                                    data: receita = [34580,35420,36900,31520,32900,34580,35420,36900,31520,32900,33000,33200],
+                                          label: "Realizado",
+                                          borderWidth: 1,
+                                          borderColor: "yellow",
+                                          backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)"],
+
+                                        },
+                                        {
+                                          type: 'line',
+                                          data: lucro = [24580,25420,26900,32520,35900,36005,36100,36200,36400,36500,36800,36900],
+                                          label: "Orçado",
+                                          borderWidth: 1,
+                                          borderColor: "green",
+                                          backgroundColor:["rgba(54, 162, 235, 0.2)"],
+                                        }]
+                                                },
+                                                options: {
+                                                  scales: {
+                                                    xAxes: [{years,
+                                                      ticks: {
+                                                        beginAtZero: false
+                                                      }
+                                                    }]
+                                                  },
+                                                  title: {
+                                                    display: true,
+                                                    fontSize:20,
+                                                    text:'RECEITAS - ACUMULADAS',
+                                                  }
+                                                }
+                                              });
+
+                                          </script>
+
+
+</script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+                    <script>
+                        var ctx = document.getElementById("myChart");
+                        var mixedChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                            labels:years = [1,2,3,4,5,6,7,8,9,10,11,12],
+
+                                datasets:[{
+                                    data: receita = [34580,35420,36900,31520,32900,34580,35420,36900,31520,32900,33000,33200],
+                                          label: "Realizado",
+                                          borderWidth: 1,
+                                          borderColor: "red",
+                                          backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)"],
+
+                                        },
+                                        {
+                                          type: 'line',
+                                          data: lucro = [24580,25420,26900,32520,35900,36005,36100,36200,36400,36500,36800,36900],
+                                          label: "Orçado",
+                                          borderWidth: 1,
+                                          borderColor: "blue",
+                                          backgroundColor:["rgba(54, 162, 235, 0.2)"],
+                                        }]
+                                                },
+                                                options: {
+                                                  scales: {
+                                                    xAxes: [{years,
+                                                      ticks: {
+                                                        beginAtZero: false
+                                                      }
+                                                    }]
+                                                  },
+                                                  title: {
+                                                    display: true,
+                                                    fontSize:20,
+                                                    text:'RECEITAS - ACUMULADAS',
+                                                  }
+                                                }
+                                              });
+
+                                          </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+                    <script>
+                        var ctx = document.getElementById("myChart1");
+                        var mixedChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                            labels:years = [1,2,3,4,5,6,7,8,9,10,11,12],
+
+                                datasets:[{
+                                    data: receita = [34580,35420,36900,31520,32900,34580,35420,36900,31520,32900,33000,33200],
+                                          label: "Realizado",
+                                          borderWidth: 1,
+                                          borderColor: "red",
+                                          backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.2)"],
+
+                                        },
+                                        {
+                                          type: 'line',
+                                          data: lucro = [24580,25420,26900,32520,35900,36005,36100,36200,36400,36500,36800,36900],
+                                          label: "Orçado",
+                                          borderWidth: 1,
+                                          borderColor: "blue",
+                                          backgroundColor:["rgba(54, 162, 235, 0.2)"],
+                                        }]
+                                                },
+                                                options: {
+                                                  scales: {
+                                                    xAxes: [{years,
+                                                      ticks: {
+                                                        beginAtZero: false
+                                                      }
+                                                    }]
+                                                  },
+                                                  title: {
+                                                    display: true,
+                                                    fontSize:20,
+                                                    text:'RECEITAS - ACUMULADAS',
+                                                  }
+                                                }
+                                              });
+
+                                          </script>
+
+  </div>
+<br>
+<br>
+<div class="row">
+ <div class="col-lg-12">
+   <div class="content ">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="specpanel">
+                    <div class="panel-body">
+                        <div class="text-center">
+                    </div>
+                </div>
+            </div>
+         </div>
+     </div>
+</div>
+<div class="card-deck ">
+  <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-body ">
+      <canvas id="myChart2"></canvas>
+    </div>
+  </div>
+  <!--div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-body ">
+      <div id="chart_div" style="width: 300px; height: 200px;"></div>
+    </div>
+  </div-->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+                    <script>
+                        var ctx = document.getElementById("myChart2");
+                        var mixedChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                            labels:years = [1,2,3,4,5,6,7,8,9,10,11,12],
+
+                                datasets:[{
+                                    data: receita = [34580,35420,36900,31520,32900,34580,35420,36900,31520,32900,33000,33200],
+                                          label: "Realizado",
+                                          borderWidth: 1,
+                                          borderColor: "green",
+                                          backgroundColor:["rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)","rgba(112,219,147, 0.2)"],
+
+                                        },
+                                        {
+                                          type: 'line',
+                                          data: lucro = [24580,25420,26900,32520,35900,36005,36100,36200,36400,36500,36800,36900],
+                                          label: "Orçado",
+                                          borderWidth: 1,
+                                          borderColor: "green",
+                                          backgroundColor:["rgba(112,219,147, 0.2)"],
+                                        }]
+                                                },
+                                                options: {
+                                                  scales: {
+                                                    xAxes: [{years,
+                                                      ticks: {
+                                                        beginAtZero: false
+                                                      }
+                                                    }]
+                                                  },
+                                                  title: {
+                                                    display: true,
+                                                    fontSize:20,
+                                                    text:'RECEITAS - ACUMULADAS',
+                                                  }
+                                                }
+                                              });
+
+                                          </script>
+    {% endblock  %}

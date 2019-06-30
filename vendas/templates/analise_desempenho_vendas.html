@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'vendas:painel_desempenho_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Inserir Dados</button></a>
+	<a href="{% url 'vendas:dashboard_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<br>
+<br>
+<br>
+ <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Análise de Desempenho Vendas  <!--a href="{% url 'vendas:painel_desempenho_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline ">Inserir Dados</button></a> </h2-->
+                    </div>
+                      <table class="table">
+                        <thead class="bg-dark" style="color:white">
+                          <tr>
+                            <th>Analise </th>
+                            <th>Resultado</th>
+                            <th>Classificação </th>
+                          </tr>
+                        </thead>
+                    <thead >
+                    <th >MKT</th>
+                    <th ></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fatia de Mercado</td>
+                        {% for carteira_de_clientes_ativa, ano in vendas.carteira_de_clientes_ativa %}
+                         <td>{{ carteira_de_clientes_ativa | floatformat:2 }}</td>
+                        {% endfor %}
+                              <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="carteira_de_clientes_ativa" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.carteira_de_clientes_ativa == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.carteira_de_clientes_ativa == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.carteira_de_clientes_ativa == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>Novos Clientes no Ano</td>
+                            {% for novos_clientes_no_ano, ano in vendas.novos_clientes_no_ano %}
+                             <td> {{ novos_clientes_no_ano | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="novos_clientes_no_ano" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.novos_clientes_no_ano == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.novos_clientes_no_ano == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.novos_clientes_no_ano == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+
+                    </tbody>
+                        <tbody>
+                        <thead class="bg-light">
+                      <th >Vendas</th>
+                        <th ></th>
+                        <th ></th>
+                      </thead>
+                          <tr>
+                            <td>Propostas Enviadas</td>
+                            {% for propostas_enviadas_no_ano, ano in vendas.propostas_enviadas_no_ano %}
+                             <td> {{ propostas_enviadas_no_ano | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="propostas_enviadas_no_ano" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.propostas_enviadas_no_ano == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.propostas_enviadas_no_ano == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.propostas_enviadas_no_ano == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Taxa de Conversão de Proposta </td>
+                            {% for propostas_aprovadas_no_ano, ano in vendas.propostas_aprovadas_no_ano %}
+                             <td> {{ propostas_aprovadas_no_ano | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="propostas_aprovadas_no_ano" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.propostas_aprovadas_no_ano == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Ticket Medio</td>
+                            {% for notas_fiscais_emitidas, ano in vendas.notas_fiscais_emitidas %}
+                             <td>R$ {{ notas_fiscais_emitidas | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="notas_fiscais_emitidas" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.notas_fiscais_emitidas == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.notas_fiscais_emitidas == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.notas_fiscais_emitidas == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                        <tbody>
+                        <thead class="bg-light" >
+                      <th>Relacionamento</th>
+                        <th></th>
+                        <th></th>
+                      </thead>
+
+                          <tr>
+                            <td>% Clientes Fidelizados</td>
+                            {% for clientes_fidelizados, ano in vendas.clientes_fidelizados %}
+                             <td> {{ clientes_fidelizados | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="clientes_fidelizados" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.clientes_fidelizados == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.clientes_fidelizados == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.clientes_fidelizados == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                             <thead class="bg-light" >
+                      <th>Satisfação</th>
+                        <th></th>
+                        <th></th>
+                      </thead
+                          <tr>
+                            <td># Reclamações no Ano</td>
+                            {% for reclamacoes_clientes, ano in vendas.reclamacoes_clientes %}
+                             <td> {{ reclamacoes_clientes | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="reclamacoes_clientes" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.reclamacoes_clientes == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.reclamacoes_clientes == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.reclamacoes_clientes == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Clientes Perdidos</td>
+                            {% for clientes_perdidos, ano in vendas.clientes_perdidos %}
+                             <td> {{ clientes_perdidos | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="clientes_perdidos" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.clientes_perdidos == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.clientes_perdidos == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.clientes_perdidos == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+
+{% endblock content %}
+
+{% block extras_js %}
+
+<script type="text/javascript">
+function atualiza_smiles(sel){
+  var k = sel.id;
+  var v = sel.options[sel.selectedIndex].value;
+  var data = {
+    'key': k,
+    'v': v,
+    'ano': {{avaliacao.vendas.ano_exercicio | unlocalize}},
+  };
+  $.ajax({
+    type: "POST",
+    url: './salvar/',
+    data: data
+  });
+}
+</script>
+{% endblock  %}

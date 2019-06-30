@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<style>
+  .moeda{
+    width: 120px;
+  }
+</style>
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'objetivos:objetivo_de_custos' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+    <!--<a href="{% url 'graficos:grafico_dre' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>-->
+    <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+<div class="container">
+       <div class="row">
+           <div class="col-12">
+               <div class="card">
+                   <div class="overflow-auto">
+                     <div class="card-header bg-secondary text-white">
+                       <h2 class="text-center">Análise de Desempenho Vendas</h2>
+                   </div>
+
+       <table class="table  table-responsive ">
+                   <thead class="bg-info">
+                       <th>Estrutura de Resultados</th>
+                       <th>Anual</th>
+                       <th class="text-center">Jan</th>
+                       <th class="text-center">Fev</th>
+                       <th class="text-center">Mar</th>
+                       <th class="text-center">Abr</th>
+                       <th class="text-center">Mai</th>
+                       <th class="text-center">Jun</th>
+                       <th class="text-center">Jul</th>
+                       <th class="text-center">Ago</th>
+                       <th class="text-center">Set</th>
+                       <th class="text-center">Out</th>
+                       <th class="text-center">Nov</th>
+                       <th class="text-center">Dez</th>
+                   </thead>
+                   <tbody>
+                   <tr>
+                       <td>Despesas Administrativa</td >
+                       <td >R$53.034.67 </td >
+                       <td ><i class='far fa-flushed' style='font-size:28px;color:yellow'></i></option></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td col-lg-2 col-md-2><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td>Despesas com Pessoal</td >
+                       <td>R$92.262,15</td >
+                       <td><i class='far fa-angry' style='font-size:28px;color:red'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td>Outras Despesas Operacionais</td >
+                       <td>R$    - </td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td>Despesas Tributarias</td >
+                       <td>R$ 651,09</td >
+                       <td><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td>Despesas Financeiras</td >
+                       <td>R$ 3.221,96</td >
+                       <td><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td>0</td >
+                       <td>R$    - </td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td>0</td >
+                       <td>R$    - </td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                       <td><i class='far fa-grin-alt' style='font-size:28px;color:green'></i></td >
+                   </tr>
+                   <tr>
+                       <td class="bg-warning">TOTAL DE CUSTOS</td >
+                       <td class="bg-warning">R$ 149.169,88</td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+                       <td class="bg-warning"><i class='far fa-grin-alt' style='font-size:28px;color:green'></td >
+
+                   </tr>
+                    <tr>
+                       <td class="bg-warning">RECEITA LIQUIDA</td >
+                       <td class="bg-warning">R$ 157.473,85</td >
+                       <td class="bg-warning"><i class='far fa-flushed' style='font-size:28px;color:yellow'></i></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+
+                   </tr>
+                    <tr>
+                       <td class="bg-warning">SUPERAVIT / DEFICIT LÍQUIDO</td >
+                       <td class="bg-warning">R$ 7.873,69</td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                       <td class="bg-warning"><i class='far fa-angry' style='font-size:28px;color:red'></td >
+                   </tr>
+                   <tr>
+                       <td class="text-white">___________________________________________</td >
+                       <td class="text-white">_____________________</td >
+                       <td ></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                       <td></td >
+                   </tr>
+           </tbody>
+       </table>
+   </div>
+{% endblock content %}
+
+{% block extras_js %}
+<script>
+$( ".moeda" ).keyup(function(event) {
+  if(event.which >= 37 && event.which <= 40){
+    event.preventDefault();
+  }
+
+  $(this).val(function(index, value) {
+    return value
+      .replace(/\D/g, "")
+      .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+      .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+    ;
+  });
+});
+
+function numerico(str){
+  return parseFloat(str.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", "."));
+}
+
+$(".moeda").change(function(event){
+
+
+});
+
+function atualizar(key, mes){
+  console.log("Mudança.");
+  var d = new Date();
+  var month = d.getMonth() + 1;
+  console.log(month);
+  if (month == 12){
+    alert ("Não é possível alterar o orçamento durante o último mês do ano.");
+  } else if (mes >= month){
+    //evita edição nos meses anteriores
+    //calcular total restante para ser distribuido
+    var total = numerico(document.getElementById("total_"+key).innerHTML.replace("R$", ""));
+    console.log(total);
+    for (var m=month-1; m>0; m--){
+      var atual = document.getElementById(key+"_"+m).value;
+      atual = numerico(atual);
+      console.log(atual);
+      total = total - atual;
+    }
+    console.log(total);
+    var alterado = numerico(document.getElementById(key+"_"+mes).value);
+    if (alterado > total){
+      //evita que valor seja maior que o total
+      alert("Atenção: o valor de um mês não pode superar o orçamento restante.");
+    } else {
+      var diferenca = (total - alterado)/(12-month); //calcula a diferença a ser aplicada para cada mes
+      for (i=month; i<=12; i++){
+        if (i != mes){
+          document.getElementById(key+"_"+i).value = diferenca.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }).replace("R$", "");
+        }
+      }
+    }
+    var custos =  ['despesas_com_pessoal', 'despesas_administrativas', 'despesas_ocupacao', 'despesas_logistica','despesas_vendas', 'despesas_viagens', 'despesas_servicos_pj', 'despesas_tributarias', 'despesas_financeiras', 'depreciacao_amortizacao'];
+    var data = {};
+    for (custo of custos){
+      for (i=1; i<=12; i++){
+        var string = custo + "_" + i;
+        //console.log(string);
+        var value = numerico(document.getElementById(string).value);
+        data[string] = value;
+      }
+    }
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+    console.log(data);
+  }
+
+
+
+}
+</script>
+{% endblock extras_js %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<hr>
+<div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Escolha o Diágnostico</h2>
+                         <div class="card-body">
+                        <a href="{% url 'swot:analise_swot' user=request.user %}"><button class="btn  btn-primary  shadow p-2 mb-2  rounded" style="margin-left: 370px; width: 250px;"><h4>Análise SWOT</h4></button></a>
+                    </div>
+                    </div>
+  <div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card-columns">
+                <div class="card border-light">
+                    <div id="chart_div"></div>
+                    <div class="card-body">
+                        <a href="{% url 'graficos:diagnostico_amb_ext' user=request.user %}"><button class="btn  btn-primary shadow p-3 mb-5  rounded" style="width: 250px;"><h4>Ambiente Externo</h4></button></a>
+                    </div>
+                </div>
+                <div class="card border-light">
+                  <div id="chart_div2"></div>
+                    <div class="card-body">
+                        <a href="{% url 'swot:questionario' user=request.user %}"><button class="btn  btn-primary  shadow p-3 mb-5  rounded" style="width: 250px;"><h4>Sobrevivencia</h4></button></a>
+                    </div>
+                    </div>
+                <div class="card border-light">
+                    <div id="chart_div1"></div>
+                    <div class="card-body">
+                        <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}"><button class="btn  btn-primary  shadow p-3 mb-5  rounded" style="width: 250px;"><h4>Ambiente Interno</h4></button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', {{porcentagem_sobrevivencia|unlocalize}}],
+
+        ]);
+
+        var options = {
+          width: 290, height: 290,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', {{porcentagem_sobrevivencia|unlocalize}}],
+
+        ]);
+
+        var options = {
+          width: 290, height: 290,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
+        chart.draw(data, options);
+      }
+    </script>
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', {{porcentagem_financeiro}}],
+
+        ]);
+
+        var options = {
+          width: 290, height: 290,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
+
+        chart.draw(data, options);
+      }
+</script>
+{% endblock extras_js %}

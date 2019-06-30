@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'objetivos:objetivo_de_custos' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+    <a href="{% url 'objetivos:definir_orcamento_mensal' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+    <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+       <div class="row">
+           <div class="col-12">
+               <div class="card">
+                     <div class="card-header bg-info text-white">
+                       <h2 class="text-center">Definindo Objetivos de Custos</h2>
+                        <select class="selectpicker form-control form-control-lg">
+                     <option data-content="<h5>Crescimento Sustentavel da Receita </h5>"></option>
+                       <option data-content="<h5>Manutenção da Receita<h5>"></option>
+                       <option data-content="<h5>Outros ...<h5>"></option>
+                   </select>
+                   </div>
+                   <br>
+     <!--Formulario-->
+
+<div class="bg"id="wrapper" style="min-height: 575px;">
+<div class="content ">
+       <div class="row">
+           <div class="col-md-3">
+               <div class="specpanel">
+                   <div class="panel-body">
+                       <div class="text-center">
+                   </div>
+               </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+           <div class="col-12">
+               <div class="card">
+                   <br>
+       <div class="row">
+          <div class="col-lg-4 text-center">
+           <div class="  card shadow-lg p-3 mb-5 bg-white rounded ">
+             <div class="card-body">
+                   <div class="specpanel stats">
+                           <div class="panel-body h-200">
+
+
+                               <div class="stats-icon pull-right">
+                                   <i class="fa fa-handshake-o fa-2x"></i>
+                               </div>
+                               <div class="m-t-xl">
+                           <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+                             “O ORÇAMENTO DOS CUSTOS DO PRÓXIMO EXERCÍCIO SERÁ:”
+                           </span>
+                           <h4 class="no-margins font-extra-bold text-success" style="font-size:35px;" id="total-custos-topo">R${{custos|floatformat:2}}</h4>
+                           </div>
+                       </div>
+               </div>
+             </div>
+           </div>
+
+           </div>
+
+           <div class="col-lg-4 text-center">
+             <div class="card bg-transparent border-light">
+               <div class="card-body">
+                       <div class="specpanel stats">
+                           <div class="panel-body h-200">
+                               <div class="stats-icon pull-right">
+                               </div>
+                               <div class="m-t-xl">
+
+                                   <h2 class="no-margins font-extra-bold text-success" style="font-size:45px; color:#a94442;"></h>
+                                     <br>
+                               </div>
+                           </div>
+                       </div>
+               </div>
+             </div>
+           </div>
+            <div class="col-lg-4 text-center">
+             <div class="card shadow p-3 mb-5 bg-white rounded ">
+               <div class="card-body">
+                       <div class="specpanel stats">
+                           <div class="panel-body h-200">
+                               <div class="stats-icon pull-right">
+                                   <i class="fa fa-line-chart fa-2x"></i>
+                               </div>
+                               <div class="m-t-xl">
+                            <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+                               “O CUSTOS NO PRÓXIMO EXERCÍCIO DEVERÃO CRESCER NO MÁXMIO DE”
+                           </span>
+                                   <h2 class="no-margins font-extra-bold text-success" style="font-size:45px; color:#a94442;">5,3 %</h>
+                                     <br>
+                               </div>
+                           </div>
+                       </div>
+               </div>
+             </div>
+           </div>
+
+       <div class="row">
+           <div class="col-12">
+               <div class="card">
+                   <div class="overflow-auto">
+                     <div class="card-header bg-info text-white">
+                       <h2 class="text-center">“SEGUE SUGESTÃO DE ORÇAMENTO PARA O PRÓXIMO EXERCÍCIO! <br>FAÇA OS AJUSTES NECESSÁRIOS”</h2>
+                   </div>
+<table class="table table-responsive " >
+ <thead class="thead-dark">
+   <tr>
+     <th scope="col">Estrutura de Gastos</th>
+     <th scope="col">2019</th>
+     <th scope="col">% Distribuição de Gastos</th>
+   </tr>
+ </thead>
+<tbody>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas com Pessoal
+           <input id="despesas_com_pessoal" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_com_pessoal|unlocalize}}" onchange="rangePrimary.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_com_pessoal">{{dre.despesas_com_pessoal|floatformat:2}}</td>
+     <td><output id="rangePrimary">{{objetivo.despesas_com_pessoal|unlocalize}}</output>%</td>
+   </tr>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas Administrativas
+           <input id="despesas_administrativas" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_administrativas|unlocalize}}" onchange="rangePrimary2.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_administrativas">{{dre.despesas_administrativas|floatformat:2}}</td>
+     <td><output id="rangePrimary2">{{objetivo.despesas_administrativas|unlocalize}}</output>%</td>
+   </tr>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas com Ocupação
+           <input id="despesas_ocupacao" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_ocupacao|unlocalize}}" onchange="rangePrimary3.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_ocupacao">{{dre.despesas_ocupacao|floatformat:2}}</td>
+     <td><output id="rangePrimary3">{{objetivo.despesas_ocupacao|unlocalize}}</output>%</td>
+   </tr>
+  <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas com Logística
+           <input id="despesas_logistica" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_logistica|unlocalize}}" onchange="rangePrimary4.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_logistica">{{dre.despesas_logistica|floatformat:2}}</td>
+     <td><output id="rangePrimary4">{{objetivo.despesas_logistica|unlocalize}}</output>%</td>
+   </tr>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas com Vendas
+           <input id="despesas_vendas" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_vendas|unlocalize}}" onchange="rangePrimary5.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_vendas">{{dre.despesas_vendas|floatformat:2}}</td>
+     <td><output id="rangePrimary5">{{objetivo.despesas_vendas|unlocalize}}</output>%</td>
+   </tr>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas com Viagens
+           <input id="despesas_viagens" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_viagens|unlocalize}}" onchange="rangePrimary6.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_viagens">{{dre.despesas_viagens|floatformat:2}}</td>
+     <td><output id="rangePrimary6">{{objetivo.despesas_viagens|unlocalize}}</output>%</td>
+   </tr>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas com Serviços PJ
+           <input id="despesas_servicos_pj" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_servicos_pj|unlocalize}}" onchange="rangePrimary7.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_servicos_pj">{{dre.despesas_servicos_pj|floatformat:2}}</td>
+     <td><output id="rangePrimary7">{{objetivo.despesas_servicos_pj|unlocalize}}</output>%</td>
+   </tr>
+    <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas Tributarias
+           <input id="despesas_tributarias" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_tributarias|unlocalize}}" onchange="rangePrimary8.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_tributarias">{{dre.despesas_tributarias|floatformat:2}}</td>
+     <td><output id="rangePrimary8">{{objetivo.despesas_tributarias|unlocalize}}</output>%</td>
+   </tr>
+   <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Despesas Financeiras
+           <input id="despesas_financeiras" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.despesas_financeiras|unlocalize}}" onchange="rangePrimary9.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_despesas_financeiras">{{dre.despesas_financeiras|floatformat:2}}</td>
+     <td><output id="rangePrimary9">{{objetivo.despesas_financeiras|unlocalize}}</output>%</td>
+   </tr>
+    <tr>
+     <td>
+       <div class="col-12">
+         <div class="range range-secondary ">Depreciação e Amortização
+           <input id="depreciacao_amortizacao" class="slider" type="range" name="range" min="1" max="100" value="{{objetivo.depreciacao_amortizacao|unlocalize}}" onchange="rangePrimary10.value=parseFloat(value).toFixed(1);update_receita_estimada()">
+         </div>
+       </div>
+     </td>
+     <td id="total_depreciacao_amortizacao">{{dre.depreciacao_amortizacao|floatformat:2}}</td>
+     <td><output id="rangePrimary10">{{objetivo.depreciacao_amortizacao|unlocalize}}</output>%</td>
+   </tr>
+   <tr id="tabela-total" class="table-success">
+     <td class="font-weight-bold">Total de Custos </td>
+     <td class="font-weight-bold" id="total-custos">R$ {{custos|floatformat:2}}</td>
+     <td class="font-weight-bold" id="total-porcentagem">{{porcentagem|floatformat:1}}%</td>
+   </tr>
+   <tr>
+     <td  style="color:white;">___________________________________________________________________</td>
+     <td style="color:white;">________________________________________________</td>
+     <td style="color:white;" >_________________________________________</td>
+   </tr>
+</tbody>
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function atualizar_parciais(){
+   var sliders = ['despesas_com_pessoal', 'despesas_administrativas', 'despesas_ocupacao', 'despesas_logistica','despesas_vendas', 'despesas_viagens', 'despesas_servicos_pj', 'despesas_tributarias', 'despesas_financeiras', 'depreciacao_amortizacao'];
+    for (i of sliders){
+     var slider = document.getElementById(i);
+      var parcial = parseFloat(slider.value) / 100 * ({{custos_totais|unlocalize}});
+      //alert(parseFloat(slider.value));
+      $("#total_"+i).html(parcial.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+    };
+  }
+  atualizar_parciais();
+  function update_receita_estimada(){
+    atualizar_parciais();
+    var data = {};
+
+    sliders = ['despesas_com_pessoal', 'despesas_administrativas', 'despesas_ocupacao', 'despesas_logistica','despesas_vendas', 'despesas_viagens', 'despesas_servicos_pj', 'despesas_tributarias', 'despesas_financeiras', 'depreciacao_amortizacao'];
+    var total = 0;
+    for (i of sliders){
+      slider = document.getElementById(i);
+      data[i] = parseFloat(slider.value);
+      total += parseFloat(slider.value);
+    };
+
+    $("#total-porcentagem").html((parseFloat(total).toFixed(1)).replace('.',',') + "%");
+    var custos_atualizados = ({{custos_totais|unlocalize}} * (total/100)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    $("#total-custos").html(custos_atualizados);
+    //$("#total-custos-topo").html(custos_atualizados);
+    if(total <= 100){
+      $.ajax({
+        type: "POST",
+        url: './salvar/',
+        data: data
+      });
+      $("#tabela-total").removeClass("table-danger");
+      $("#tabela-total").addClass("table-success");
+    } else {
+      alert("Atenção: o total proporcional de despesas não deve ultrapassar 100%.");
+      $("#tabela-total").removeClass("table-success");
+      $("#tabela-total").addClass("table-danger");
+    }
+
+
+  };
+</script>
+{% endblock extras_js %}

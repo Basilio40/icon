@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<hr>
+<div class="container">
+      <div class="row">
+          <div class="col-12">
+              <div class="card">
+                <br>
+                 <div class="btn-group mr-2">
+                  <a href="/dre/{{ request.user }}" class="href"><button type="button" class="btn btn-sm btn-outline-info">__DRE___</button></a>
+                  <a href="{% url 'objetivos:analise_desempenho_financeiro' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Analise</button></a>
+                  <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+                 </div>
+                     <br>
+                    <div class="card-header bg-info text-white">
+                      <h2 class="text-center">Painel de Desempenho Financeiro</h2>
+                  </div>
+  <!--Canvas dos graficos -->
+<div class="row">
+  <canvas class="my-4 col-md-4  " id="receita_vs_lucro" height="200" style="font-size: 20px;"></canvas>
+  <canvas class="my-4 col-md-4  " id="rentabilidade_vs_ebitda"  height="240"></canvas>
+  <canvas class="my-4 col-md-4  " id="despesa_vs_lucro"  height="240"></canvas>
+</div>
+<div class="row">
+  <canvas class="my-4 col-md-4  " id="receita_vs_despesa" height="240"></canvas>
+  <canvas class="my-4 col-md-4  " id="myChart4"  height="240"></canvas>
+  <canvas class="my-4 col-md-4  " id="despesa_vs_lucro_bar"  height="240"></canvas>
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+<!-- Graficos -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+  var ctx = document.getElementById("receita_vs_lucro");
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels:years = [
+      {% for ano in anos %}
+        {{ano | unlocalize}},
+      {% endfor %}
+      ] ,
+      datasets:[{
+        data: receita = [
+        {% for receita in receitas %}
+          {{receita|unlocalize}},
+        {% endfor %}
+        ],
+        label: "Receita",
+        borderColor: "#3e95cd",
+        fill: false
+      },
+      {
+        data: lucro = [
+        {% for lucro in lucros %}
+          {{lucro|unlocalize}},
+        {% endfor %}
+        ],
+        label: "Lucro",
+        borderColor: "orange",
+        fill: false
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          years,
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  });
+</script>
+
+<script>
+  var ctx = document.getElementById("rentabilidade_vs_ebitda");
+  var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+  labels:years = [
+  {% for ano in anos %}
+    {{ano | unlocalize}},
+  {% endfor %}
+  ],
+
+  datasets:[{
+    data: Rentabilidade = [
+    {% for rentabilidade in rentabilidades %}
+      {{rentabilidade|unlocalize}},
+    {% endfor %}
+    ],
+    label: "Rentabilidade",
+    borderColor: "orange",
+    fill: false
+  },
+  {
+    data: ebitda = [
+    {% for ebitda in ebitdas %}
+      {{ebitda|unlocalize}},
+    {% endfor %}
+    ],
+    label: "EBTIDA",
+    borderColor: "#3e95cd",
+    fill: false
+  }]
+},
+  options: {
+      scales: {
+        xAxes: [{years,
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  });
+</script>
+<script>
+  var ctx = document.getElementById("despesa_vs_lucro");
+  var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+  labels:years = [
+  {% for ano in anos %}
+    {{ano | unlocalize}},
+  {% endfor %}
+  ],
+
+  datasets:[{
+    data: despesa = [
+    {% for despesa in despesas %}
+      {{despesa|unlocalize}},
+    {% endfor %}
+    ],
+    label: "Total Despesas",
+    borderColor: "orange",
+    fill: false
+  },
+  {
+    data: lucro = [
+    {% for lucro_liquido in lucros_liquidos %}
+      {{lucro_liquido|unlocalize}},
+    {% endfor %}
+    ],
+    label: "Lucro Liquido",
+    borderColor: "#3e95cd",
+    fill: false
+  }]
+  },
+  options: {
+      scales: {
+        xAxes: [{years,
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  });
+</script>
+<script>
+  var ctx = document.getElementById("receita_vs_despesa");
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels:years = [
+      {% for ano in anos %}
+        {{ano | unlocalize}},
+      {% endfor %}
+      ],
+
+    datasets:[{
+      data: receita_bruta = [
+      {% for receita in receitas %}
+        {{receita|unlocalize}},
+      {% endfor %}
+      ],
+      label: "Receita Bruta",
+      borderColor: "orange",
+      fill: false
+    },
+    {
+      data: despesa = [
+      {% for despesa in despesas %}
+        {{despesa|unlocalize}},
+      {% endfor %}
+      ],
+      label: "Total de Despesas",
+      borderColor: "#3e95cd",
+      fill: false
+    }]},
+    options: {
+      scales: {
+        xAxes: [{years,
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  });
+</script>
+<script>
+  var ctx = document.getElementById("myChart4");
+  var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+  labels:years = [2014,2015,2016,2017,2018],
+
+  datasets:[{
+data: pessoal = [512.8,540.8,743.8,689.6,729.3],
+label: "Pessoal",
+borderColor: "blue",
+fill: false
+},
+{
+data: administrativas = [1850,456.4,360.1,268.3,304],
+label: "Administrativas",
+borderColor: "orange",
+fill: false
+},
+{
+data: ocupacao = [169,70.22,72.14,68.13,70],
+label: "Ocupação",
+borderColor: "grey",
+fill: false
+},
+{
+data: serviços_pj = [154,133,144.5,332.1,280],
+label: "Serviços PJ",
+borderColor: "yellow",
+fill: false
+},
+{
+data:financeiras = [1667,14.1,24.16,20.18,23.2],
+label: "Financeiras",
+borderColor: "#3e95cd",
+fill: false
+}]
+    },
+    options: {
+      scales: {
+        xAxes: [{years,
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  });
+</script>
+<script>
+  var ctx = document.getElementById("despesa_vs_lucro_bar");
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels:years = [2014,2015,2016,2017,2018],
+      datasets:[{
+        data: despesa = [
+        {% for despesa in despesas %}
+          {{despesa|unlocalize}},
+        {% endfor %}
+        ],
+        label: "Total Despesas",
+        borderColor: "orange",
+        fill: false
+      },
+      {
+        data: lucro = [
+        {% for lucro_liquido in lucros_liquidos %}
+          {{lucro_liquido|unlocalize}},
+        {% endfor %}
+        ],
+        label: "Lucro Liquido",
+        borderColor: "#3e95cd",
+        fill: false
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{years,
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  });
+</script>
+{% endblock extras_js %}

@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+
+<!--Navegação-->
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'graficos:ped_desempenho' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+    <a href="{% url 'processos_produtivo:qualidade' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+    <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+<div class="container">
+      <div class="row">
+          <div class="col-12">
+              <div class="card">
+                    <div class="card-header bg-info text-white">
+                      <h2 class="text-center">Definindo objetivos de Produtividade</h2>
+                        <div class="card-header bg-info text-white">
+                        <select class="selectpicker form-control form-control-lg">
+                     <option data-content="<h5>Crescimento Sustentavel da Receita </h5>"></option>
+                       <option data-content="<h5>Manutenção da Receita<h5>"></option>
+                       <option data-content="<h5>Outros ...<h5>"></option>
+                   </select>
+                   </div>
+                  </div>
+<br>
+<div class="bg"id="wrapper" style="min-height: 575px;">
+<div class="content ">
+      <div class="row">
+          <div class="col-md-3">
+              <div class="specpanel">
+                  <div class="panel-body">
+                      <div class="text-center">
+                  </div>
+              </div>
+          </div>
+       </div>
+   </div>
+</div>
+<br>
+      <div class="row">
+          <div class="col-lg-4 text-center">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+              <div class="card-body">
+                      <div class="specpanel stats">
+                          <div class="panel-body h-200">
+                              <div class="stats-icon pull-right">
+                                  <i class="fa fa-line-chart fa-2x"></i>
+                              </div>
+                              <div class="m-t-xl">
+                           <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+                             Defina a meta de % aumento de produtividade
+                           </span>
+                           <br>
+                                <div align=center>
+                                   <input type="number" class="form-control" id="meta_rentabilidade" oninput="update_receita_estimada()" value="{{rentabilidade_percentage | floatformat:0}}" placeholder="Meta de Rentabilidade" style="width: 90%; display: inline; text-align: center;">
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+            </div>
+          </div>
+           <div class="col-lg-4 text-center">
+            <div class="card  bg-transparent border-light">
+              <div class="card-body">
+                      <div class="specpanel stats">
+                          <div class="panel-body h-200">
+                              <div class="stats-icon pull-right">
+                              </div>
+                              <div class="m-t-xl">
+                           <span ><span>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 text-center">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+              <div class="card-body">
+                      <div class="specpanel stats">
+                          <div class="panel-body h-200">
+                              <div class="stats-icon pull-right">
+                                  <i class="fa fa-line-chart fa-2x"></i>
+                              </div>
+                              <div class="m-t-xl">
+                                  <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+                               Meta de percentual de aumento de produtividade
+                          </span>
+                          <br>
+                          <br>
+                            <div align=center>
+
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+              </div>
+            </div>
+          </div>
+
+
+  <div class="container clearfix tl-Spacing">
+      <div class="card-responsive col-lg-12 text-center "">
+          <div class="card-responsive card shadow-lg p-2 mb-5 rounded">
+                  <div class="overflow-auto">
+                    <div class="sticky-top">
+                        <table class="table table--light table-dre dre-table::after">
+                          <br>
+ <table id="example" class="stripe row-border order-column" style="width:100%">
+
+   <table class="table table-responsive">
+    <thead class="thead-dark col-lg-8">
+      <tr>
+        <th scope="col-lg-4">Análise de Receita</th>
+        <th scope="col-lg-4">Resultado</th>
+        <th scope="col-lg-4">Análise </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Faturamento/Funcionário</td>
+          {% for funcionarios, ano in processos.funcionarios %}
+          <td>{{ funcionarios | floatformat }}</td>
+          {% endfor %}
+        <td>
+            <select class="selectpicker col-lg-8 col-sm-8" id="funcionarios" onchange="atualiza_smiles(this)">
+                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.funcionarios == 'Bom' %}selected{%endif%}></option>
+                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.funcionarios == 'Neutro' %}selected{%endif%}></option>
+                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.funcionarios == 'Ruim' %}selected{%endif%}></option>
+            </select>
+        </td>
+      </tr>
+      <tr>
+       <tr>
+        <td>% Folha/Faturamento</td>
+          <td>13 %</td>
+        <td>
+            <select class="selectpicker col-lg-8 col-sm-8" id="valor_do_estoque" onchange="atualiza_smiles(this)">
+                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.valor_do_estoque == 'Bom' %}selected{%endif%}></option>
+                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.valor_do_estoque == 'Neutro' %}selected{%endif%}></option>
+                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.valor_do_estoque == 'Ruim' %}selected{%endif%}></option>
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>% Capacidade Produtiva Utilizada</td>
+
+          <td>61,3 %</td>
+
+        <td>
+            <select class="selectpicker col-lg-8 col-sm-8" id="custos_garantia" onchange="atualiza_smiles(this)">
+                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.custos_garantia == 'Bom' %}selected{%endif%}></option>
+                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.custos_garantia == 'Neutro' %}selected{%endif%}></option>
+                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.custos_garantia == 'Ruim' %}selected{%endif%}></option>
+            </select>
+        </td>
+      </tr>
+
+
+      <tr>
+
+        <td style="color:white">_______________________________________________________________________________</td>
+        <td style="color:white">_________________________________________</td>
+        <td style="color:white">_______________________</td>
+      </tr>
+
+    </tbody>
+  </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function update_receita_estimada(){
+    var selector_rentabilidade = document.getElementById("meta_rentabilidade");
+    var selector_ebitda = document.getElementById("meta_ebitda");
+    var receita_id = document.getElementById("receita_atualizada");
+    var ebitda_id = document.getElementById("ebitda_atualizada");
+
+    var data = {};
+
+    smiles = ['smile_lucro_liquido', 'smile_rentabilidade_media', 'smile_rentabilidade_ultimo',
+              'smile_rentabilidade_comparada', 'smile_ebitda_medio', 'smile_ebitda_ultimo'];
+    for (i of smiles){
+      smile = document.getElementById(i);
+      data[i] = smile.options[smile.selectedIndex].value;
+    };
+    data['rentabilidade_percentage'] = parseFloat(selector_rentabilidade.value) / 100;
+    data['ebitda_percentage'] = (parseFloat(selector_ebitda.value) / 100) + 1;
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+
+    // Atualização de campos
+    nova_rentabilidade = parseFloat(selector_rentabilidade.value/100) * {{receita|unlocalize}};
+    receita_id.innerHTML = nova_rentabilidade.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    nova_ebitda = ((parseFloat(selector_ebitda.value) / 100) + 1) * {{ebitda|unlocalize}};
+    ebitda_id.innerHTML = nova_ebitda.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+</script>
+{% endblock extras_js %}

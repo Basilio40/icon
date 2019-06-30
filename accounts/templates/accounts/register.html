@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="">
+
+<link href="{% static 'libs/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+
+	<style>
+	.bd-placeholder-img {
+		font-size: 1.125rem;
+		text-anchor: middle;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	@media (min-width: 768px) {
+		.bd-placeholder-img-lg {
+			font-size: 3.5rem;
+		}
+	}
+	</style>
+	<!-- Custom styles for this template -->
+	<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+<br>
+<br>
+<br>
+    <div class="container">
+            <div class="col-md-12 col-lg-offset-2">
+                <h2 class="text-center">Formulário de Cadastro</h2>
+                <form action="." method="post">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+										{{ empresa_form | crispy }}
+                    <button type="submit" class="btn btn-lg btn-primary btn-block">Cadastrar</button>
+                </form>
+            </div>
+						<hr>
+    </div>
+
+{% endblock content %}

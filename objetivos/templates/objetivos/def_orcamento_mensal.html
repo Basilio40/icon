@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<style>
+  .moeda{
+    width: 120px;
+  }
+</style>
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'objetivos:objetivo_de_custos' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+    <!--<a href="{% url 'graficos:grafico_dre' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>-->
+    <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+ <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-secondary text-white">
+                        <h2 class="text-center">Estruturação do Orçamento Mensal</h2>
+                    </div>
+        <table class="table table-responsive ">
+                <div>
+                    <thead class="bg-info text-white ">
+                        <th >Estrutura de Resultados</th>
+                        <th>Anual</th>
+
+                        <th class="text-center">Jan</th>
+                        <th class="text-center">Fev</th>
+                        <th class="text-center">Mar</th>
+                        <th class="text-center">Abr</th>
+                        <th class="text-center">Mai</th>
+                        <th class="text-center">Jun</th>
+                        <th class="text-center">Jul</th>
+                        <th class="text-center">Ago</th>
+                        <th class="text-center">Set</th>
+                        <th class="text-center">Out</th>
+                        <th class="text-center">Nov</th>
+                        <th class="text-center">Dez</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Despesas com Pessoal </td >
+                        <td id="total_despesas_com_pessoal">R$ {{desp_total.despesas_com_pessoal | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_com_pessoal_{{forloop.counter}}" class="moeda" value="{{d.despesas_com_pessoal | floatformat:2}}" onchange="atualizar('despesas_com_pessoal', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas Administrativas </td >
+                        <td id="total_despesas_administrativas">R$ {{desp_total.despesas_administrativas | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_administrativas_{{forloop.counter}}" class="moeda" value="{{d.despesas_administrativas | floatformat:2}}" onchange="atualizar('despesas_administrativas', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas com Ocupação </td >
+                        <td id="total_despesas_ocupacao">R$ {{desp_total.despesas_ocupacao | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_ocupacao_{{forloop.counter}}" class="moeda" value="{{d.despesas_ocupacao | floatformat:2}}" onchange="atualizar('despesas_ocupacao', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas com Logística </td >
+                        <td id="total_despesas_logistica">R$ {{desp_total.despesas_logistica | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_logistica_{{forloop.counter}}" class="moeda" value="{{d.despesas_logistica | floatformat:2}}" onchange="atualizar('despesas_logistica', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas com Vendas </td >
+                        <td id="total_despesas_vendas">R$ {{desp_total.despesas_vendas | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_vendas_{{forloop.counter}}" class="moeda" value="{{d.despesas_vendas | floatformat:2}}" onchange="atualizar('despesas_vendas', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas com Viagens </td >
+                        <td id="total_despesas_viagens">R$ {{desp_total.despesas_viagens | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_viagens_{{forloop.counter}}" class="moeda" value="{{d.despesas_viagens | floatformat:2}}" onchange="atualizar('despesas_viagens', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas com Serviços PJ </td >
+                        <td id="total_despesas_servicos_pj">R$ {{desp_total.despesas_servicos_pj | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_servicos_pj_{{forloop.counter}}" class="moeda" value="{{d.despesas_servicos_pj | floatformat:2}}" onchange="atualizar('despesas_servicos_pj', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas Tributarias</td>
+                        <td id="total_despesas_tributarias">R$ {{desp_total.despesas_tributarias | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_tributarias_{{forloop.counter}}" class="moeda" value="{{d.despesas_tributarias | floatformat:2}}" onchange="atualizar('despesas_tributarias', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Despesas Financeiras</td>
+                        <td id="total_despesas_financeiras">R$ {{desp_total.despesas_financeiras | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="despesas_financeiras_{{forloop.counter}}" class="moeda" value="{{d.despesas_financeiras | floatformat:2}}" onchange="atualizar('despesas_financeiras', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td>Depreciação e Amortização</td>
+                        <td id="total_depreciacao_amortizacao">R$ {{desp_total.depreciacao_amortizacao | floatformat:2}}</td >
+                          {% for d in desp %}
+                        <td><input type="text" id="depreciacao_amortizacao_{{forloop.counter}}" class="moeda" value="{{d.depreciacao_amortizacao | floatformat:2}}" onchange="atualizar('depreciacao_amortizacao', {{forloop.counter}})"></td >
+                          {% endfor %}
+
+                    </tr>
+                    <tr>
+                        <td class="bg-warning">TOTAL DE CUSTOS</td >
+                        <td class="bg-warning">R$ {{custo_total | floatformat:2}}</td >
+
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+
+                    </tr>
+                     <tr>
+                        <td class="bg-warning">RECEITA BRUTA</td >
+                        <td class="bg-warning">R$ {{receita_bruta | floatformat:2}}</td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                    </tr>
+                     <tr>
+                        <td class="bg-warning">SUPERAVIT / DEFICIT LÍQUIDO</td >
+                        <td class="bg-warning">R$ {{balanco | floatformat:2}}</td >
+
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                        <td class="bg-warning"></td >
+                    </tr>
+                </div>
+            </tbody>
+        </table>
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+<script>
+$( ".moeda" ).keyup(function(event) {
+  if(event.which >= 37 && event.which <= 40){
+    event.preventDefault();
+  }
+
+  $(this).val(function(index, value) {
+    return value
+      .replace(/\D/g, "")
+      .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+      .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+    ;
+  });
+});
+
+function numerico(str){
+  return parseFloat(str.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", "."));
+}
+
+$(".moeda").change(function(event){
+
+
+});
+
+function atualizar(key, mes){
+  //console.log("Mudança.");
+  var d = new Date();
+  var month = 1;
+  // console.log(month);
+  if (month == 12){
+    alert ("Não é possível alterar o orçamento durante o último mês do ano.");
+  } else if (mes >= month){
+    //evita edição nos meses anteriores
+    //calcular total restante para ser distribuido
+    var total = numerico(document.getElementById("total_"+key).innerHTML.replace("R$", ""));
+    //console.log(total);
+    for (var m=month-1; m>0; m--){
+      var atual = document.getElementById(key+"_"+m).value;
+      atual = numerico(atual);
+      //console.log(atual);
+      total = total - atual;
+    }
+    //console.log(total);
+    var alterado = numerico(document.getElementById(key+"_"+mes).value);
+    if (alterado > total){
+      //evita que valor seja maior que o total
+      alert("Atenção: o valor de um mês não pode superar o orçamento restante.");
+    } else {
+      var diferenca = (total - alterado)/(12-month); //calcula a diferença a ser aplicada para cada mes
+      for (i=month; i<=12; i++){
+        if (i != mes){
+          document.getElementById(key+"_"+i).value = diferenca.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }).replace("R$", "");
+        }
+      }
+    }
+    var custos =  ['despesas_com_pessoal', 'despesas_administrativas', 'despesas_ocupacao', 'despesas_logistica','despesas_vendas', 'despesas_viagens', 'despesas_servicos_pj', 'despesas_tributarias', 'despesas_financeiras', 'depreciacao_amortizacao'];
+    var data = {};
+    for (custo of custos){
+      for (i=1; i<=12; i++){
+        var string = custo + "_" + i;
+        //console.log(string);
+        var value = numerico(document.getElementById(string).value);
+        data[string] = value;
+      }
+    }
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+    //console.log(data);
+  }
+
+
+
+}
+</script>
+{% endblock extras_js %}

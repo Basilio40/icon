@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'processos_produtivo:painel_desempenho_processos_produtivos' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Inserir Dados</button></a>
+	<a href="{% url 'vendas:dashboard_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<br>
+<br>
+<br>
+ <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Análise de Desempenho Processos Produtivos   <!--a href="{% url 'vendas:painel_desempenho_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline ">Inserir Dados</button></a> </h2-->
+                    </div>
+                      <table class="table">
+                        <thead class="bg-dark" style="color:white">
+                          <tr>
+                            <th>Analise </th>
+                            <th>Resultado</th>
+                            <th>Classificação </th>
+                          </tr>
+                        </thead>
+                    <thead >
+                    <th >Produtividade</th>
+                    <th ></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Faturamento/Funcionário</td>
+                        {% for funcionarios, ano in processos.funcionarios %}
+                         <td>{{ funcionarios | floatformat }}</td>
+                        {% endfor %}
+                              <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="funcionarios" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.funcionarios == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.funcionarios == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.funcionarios == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>% Folha/Faturamento</td>
+                            {% for volume_produzido_no_ano, ano in processos.volume_produzido_no_ano %}
+                             <td>R$ {{ volume_produzido_no_ano | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="volume_produzido_no_ano" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.volume_produzido_no_ano == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.volume_produzido_no_ano == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.volume_produzido_no_ano == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                    </tbody>
+                        <tbody>
+
+                          <tr>
+                            <td>% Capacidade Produtiva Utilizada</td>
+                            {% for capacidade_produzida, ano in processos.capacidade_produzida %}
+                             <td>R$ {{ capacidade_produzida | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="capacidade_produzida" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.capacidade_produzida == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.capacidade_produzida == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.capacidade_produzida == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                    <thead class="bg-light">
+                      <th >Qualidade</th>
+                        <th ></th>
+                        <th ></th>
+                      </thead>
+                          <tr>
+                            <td>% Refugo/Retrabalho </td>
+                            {% for refugo_retrabalho, ano in processos.refugo_retrabalho %}
+                             <td> {{ refugo_retrabalho | floatformat:2 }}%</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="refugo_retrabalho" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.refugo_retrabalho == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.refugo_retrabalho == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.refugo_retrabalho == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>%Custo Garantia/Faturamento</td>
+                            {% for custos_garantia, ano in processos.custos_garantia %}
+                             <td>R$ {{ custos_garantia | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="custos_garantia" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.custos_garantia == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.custos_garantia == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.custos_garantia == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                        <tbody>
+                        <thead class="bg-light" >
+                      <th>Prazos</th>
+                        <th></th>
+                        <th></th>
+                      </thead>
+
+                          <tr>
+                            <td>% Entrega no Prazo</td>
+                            {% for entregas_no_prazo, ano in processos.entregas_no_prazo %}
+                             <td> {{ entregas_no_prazo | floatformat }}%</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="clientes_fidelizados" onchange="entregas_no_prazo(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.entregas_no_prazo == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.entregas_no_prazo == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.entregas_no_prazo == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                             <thead class="bg-light" >
+                      <th>Estoques</th>
+                        <th></th>
+                        <th></th>
+                      </thead
+                          <tr>
+                            <td>Estoque (Valor)</td>
+                            {% for valor_do_estoque, ano in processos.valor_do_estoque %}
+                             <td>R$ {{ valor_do_estoque | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="valor_do_estoque" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.valor_do_estoque == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.valor_do_estoque == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.valor_do_estoque == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr>
+                          <!--tr>
+                            <td>Giro de Estoque</td>
+                            {% for clientes_perdidos, ano in vendas.clientes_perdidos %}
+                             <td> {{ clientes_perdidos | floatformat:2 }}</td>
+                            {% endfor %}
+                            <td>
+                              <select class="selectpicker col-lg-8 col-sm-8" id="clientes_perdidos" onchange="atualiza_smiles(this)">
+                                <option value="Bom" data-content="<i class='far fa-grin-alt' style='font-size:28px;color:green'></i> " {% if avaliacao.clientes_perdidos == 'Bom' %}selected{%endif%}></option>
+                                <option value="Neutro" data-content="<i class='far fa-flushed' style='font-size:28px;color:yellow'></i> " {% if avaliacao.clientes_perdidos == 'Neutro' %}selected{%endif%}></option>
+                                <option value="Ruim" data-content="<i class='far fa-angry' style='font-size:28px;color:red'></i> " {% if avaliacao.clientes_perdidos == 'Ruim' %}selected{%endif%}></option>
+                            </select>
+                            </td>
+                          </tr-->
+
+                        </tbody>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+
+{% endblock content %}
+
+{% block extras_js %}
+
+<script type="text/javascript">
+function atualiza_smiles(sel){
+  var k = sel.id;
+  var v = sel.options[sel.selectedIndex].value;
+  var data = {
+    'key': k,
+    'v': v,
+    'ano': {{avaliacao.processos.ano_exercicio | unlocalize}},
+  };
+  $.ajax({
+    type: "POST",
+    url: './salvar/',
+    data: data
+  });
+}
+</script>
+{% endblock  %}

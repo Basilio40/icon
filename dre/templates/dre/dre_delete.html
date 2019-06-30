@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1>Deletar DRE</h1>
+            <hr>
+
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                Cuidado! Esta ação eliminará este registro do sistema.
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <p>Tem certeza que você quer o DRE do ano de <strong>{{ dre.ano_exercicio }}</strong> ?</p>
+                <button type="submit" class="btn btn-danger">Deletar</button>
+            </form>
+
+            <hr>
+
+            <a href="{% url 'dre:detail' ano=ano user=user %}" class="btn btn-primary btn-sm" role="button">Voltar</a>
+            <a href="{% url 'dre:edit' ano=ano user=user %}" class="btn btn-primary btn-sm" role="button">Editar</a>
+
+        </div><!-- col-md-12 -->
+
+    </div><!-- row -->
+
+{% endblock content %}

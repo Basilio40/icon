@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'objetivos:objetivo_de_rentabilidade' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+    <a href="{% url 'objetivos:objetivo_de_custos' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+    <a href="{% url 'graficos:ped_desempenho' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+<div class="container">
+ <div class="row">
+     <div class="col-12">
+         <div class="card">
+               <div class="card-header bg-info text-white">
+                 <h2 class="text-center">Definindo Objetivos de Endividamento</h2>
+                   <div class="card-header bg-info text-white">
+                        <select class="selectpicker form-control form-control-lg">
+                     <option data-content="<h5>Crescimento Sustentavel da Receita </h5>"></option>
+                       <option data-content="<h5>Manutenção da Receita<h5>"></option>
+                       <option data-content="<h5>Outros ...<h5>"></option>
+                   </select>
+                   </div>
+             </div>
+<div class="bg"id="wrapper" style="min-height: 575px;">
+<div class="content ">
+ <div class="row">
+     <div class="col-lg-3">
+         <div class="specpanel">
+             <div class="panel-body">
+                 <div class="text-center">
+             </div>
+         </div>
+     </div>
+  </div>
+</div>
+</div>
+ <div class="row">
+     <div class="col-lg-4 text-center" >
+       <div class="card shadow p-3 mb-5 bg-white rounded ">
+         <div class="card-body">
+                 <div class="specpanel stats">
+                     <div class="panel-body h-200">
+                         <div class="stats-icon pull-right">
+                             <i class="fa fa-line-chart fa-2x"></i>
+                         </div>
+                         <br>
+                     <div class="m-t-xl">
+                      <span class="font-bold no-margins" style="text-transform:uppercase; font-size:23px;">
+                          Valor de Inadimplência
+                     </span>
+                             <h5 class="no-margins font-extra-bold text-success" style="font-size:41px; color:#a94442;">R$ {{ inadimplencia | floatformat:2 }}</h5>
+                         </div>
+                     </div>
+                 </div>
+         </div>
+       </div>
+     </div>
+
+         <div class="col-lg-4 text-center">
+       <div class="card shadow p-3 mb-5 bg-white rounded ">
+         <div class="card-body">
+                 <div class="specpanel stats">
+                     <div class="panel-body h-200">
+                         <div class="stats-icon pull-right">
+                             <i class="fa fa-line-chart fa-2x"></i>
+                         </div>
+                         <div class="m-t-xl">
+                           <br>
+                      <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+                         Meta de redução da Inadimplência
+                     </span>
+                     <br>
+                     <br>
+                     <div align=center>
+                       <input type="number" class="form-control" id="inadimplencia_percentage" oninput="update_receita_estimada()" value="{{inadimplencia_percentage | floatformat:0}}" placeholder="Meta de Inadimplencia" style="width: 90%; display: inline; text-align: center;"> %
+                     </div>
+                         </div>
+                     </div>
+                 </div>
+         </div>
+       </div>
+     </div>
+       <div class="col-lg-4 text-center">
+       <div class="card shadow p-3 mb-5 bg-white rounded ">
+         <div class="card-body">
+                 <div class="specpanel stats">
+                     <div class="panel-body h-200">
+                         <div class="stats-icon pull-right">
+                             <i class="fa fa-line-chart fa-2x"></i>
+                         </div>
+                         <br>
+                         <div class="m-t-xl">
+                      <span class="font-bold no-margins" style="text-transform:uppercase; font-size:19px;">
+                         Valor da Inadimplência para próximo exercício
+                     </span>
+                             <h4 id="inadimplencia_atualizada" class="no-margins font-extra-bold text-success" style="font-size:40px; color:#a94442;">R$ {{inadimplencia_|floatformat:2}}</h4>
+                         </div>
+                     </div>
+                 </div>
+         </div>
+       </div>
+     </div>
+     <div class="col-lg-4 text-center">
+       <div class="card shadow p-3 mb-5 bg-white rounded ">
+         <div class="card-body">
+                 <div class="specpanel stats">
+                     <div class="panel-body h-200">
+                         <div class="stats-icon pull-right">
+                             <i class="fa fa-line-chart fa-2x"></i>
+                         </div>
+                         <div class="m-t-xl">
+                      <span class="font-bold no-margins" style="text-transform:uppercase; font-size:20px;">
+                         Valor da dívida atual
+                     </span>
+                          <h4 class="no-margins font-extra-bold text-success" style="font-size:40px; color:#a94442;">R$ {{divida|floatformat:2}}</h4>
+                             <br>
+                             <br>
+                         </div>
+                     </div>
+                 </div>
+         </div>
+       </div>
+     </div>
+     <div class="col-lg-4 text-center">
+       <div class="card shadow p-3 mb-5 bg-white rounded ">
+         <div class="card-body">
+                 <div class="specpanel stats">
+                     <div class="panel-body h-200">
+                         <div class="stats-icon pull-right">
+                             <i class="fa fa-line-chart fa-2x"></i>
+                         </div>
+                         <br>
+                         <div class="m-t-xl">
+                      <span class="font-bold no-margins" style="text-transform:uppercase; font-size:23px;">
+                          Meta de redução da dívida
+                     </span>
+                     <br>
+                             <div align=center>
+                               <input type="number" class="form-control" id="divida_percentage" oninput="update_receita_estimada()" value="{{divida_percentage | floatformat:0}}" placeholder="Meta de Redução de Dívida" style="width: 90%; display: inline; text-align: center;"> %
+
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+         </div>
+       </div>
+     </div>
+     <div class="col-lg-4 text-center">
+       <div class="card shadow p-3 mb-5 bg-white rounded ">
+         <div class="card-body">
+                 <div class="specpanel stats">
+                     <div class="panel-body h-200">
+                         <div class="stats-icon pull-right">
+                             <i class="fa fa-line-chart fa-2x"></i>
+                         </div>
+                         <br>
+                         <div class="m-t-xl">
+                      <span class="font-bold no-margins" style="text-transform:uppercase; font-size:17px;">
+                          Valor da dívida para o próximo exercício
+                      </span>
+                             <h4 id="divida_atualizada" class="no-margins font-extra-bold text-success" style="font-size:37px; color:#a94442;">R$ {{divida_ |floatformat:2}}</h4>
+                         </div>
+                     </div>
+                 </div>
+         </div>
+       </div>
+     </div>
+
+
+<!--Cards-->
+<div class="container clearfix tl-Spacing">
+ <div class="card-responsive col-lg-12 text-center "">
+     <div class="card-responsive card shadow-lg p-2 mb-5 rounded">
+             <div class="overflow-auto">
+               <div class="sticky-top">
+                   <table class="table table--light table-dre dre-table::after">
+                     <br>
+<table id="example" class="stripe row-border order-column" style="width:100%">
+
+<div class="row">
+ <div class="col">
+ </div>
+</div>
+
+
+
+
+<table class="table table-responsive">
+<thead class="thead-dark col-lg-12">
+ <tr>
+   <th scope="col-lg-4">Análise de Endividamento</th>
+   <th scope="col-lg-4">Resultado</th>
+   <th scope="col-lg-4">Análise </th>
+ </tr>
+</thead>
+<tbody>
+ <tr>
+   <td>Valor da Dívida</td>
+   <td>R$ {{ divida | floatformat:2 }}</td>
+   <td>
+   <select onchange="update_receita_estimada()" id="smile_divida" class="selectpicker col-lg-12">
+     {% for smile in smiles.smile_divida %}
+       {{smile|safe}}
+     {% endfor %}
+ </select>
+   </td>
+
+ </tr>
+ <tr>
+   <td class="text-center">Taxa Dívida/Lucro</td>
+   <td>{{ taxa | floatformat:3 }}</td>
+   <td>
+     <select onchange="update_receita_estimada()" id="smile_taxa_divida_lucro" class="selectpicker col-lg-12">
+       {% for smile in smiles.smile_taxa_divida_lucro %}
+         {{smile|safe}}
+       {% endfor %}
+   </select>
+   </td>
+ </tr>
+ <tr>
+   <td class="text-center">inadimplência</td>
+   <td>R$ {{ inadimplencia | floatformat:2 }}</td>
+   <td>
+     <select onchange="update_receita_estimada()" id="smile_inadimplencia" class="selectpicker col-lg-12">
+       {% for smile in smiles.smile_inadimplencia %}
+         {{smile|safe}}
+       {% endfor %}
+   </select>
+   </td>
+ </tr>
+ <tr>
+   <td style="color:white">_______________________________________________________________________ </td>
+   <td style="color:white">_______________________________________________________</td>
+   <td style="color:white">________________</td>
+ </tr>
+
+</tbody>
+</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function update_receita_estimada(){
+    var selector_inadimplencia = document.getElementById("inadimplencia_percentage");
+    var inadimplencia_id = document.getElementById("inadimplencia_atualizada");
+    var selector_divida = document.getElementById("divida_percentage");
+    var divida_id = document.getElementById("divida_atualizada");
+
+    var data = {};
+
+    smiles = ['smile_divida', 'smile_taxa_divida_lucro', 'smile_inadimplencia'];
+    for (i of smiles){
+      smile = document.getElementById(i);
+      data[i] = smile.options[smile.selectedIndex].value;
+    };
+    data['inadimplencia_percentage'] = 1 - parseFloat(selector_inadimplencia.value)/100;
+    data['divida_percentage'] =  1 - parseFloat(selector_divida.value)/100;
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+
+    // Atualização de campos
+    nova_inadimplencia = (1 - parseFloat(selector_inadimplencia.value)/100)* {{inadimplencia|unlocalize}};
+    inadimplencia_id.innerHTML = nova_inadimplencia.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });;
+    nova_divida = (1 - parseFloat(selector_divida.value)/100) * {{divida|unlocalize}};
+    divida_id.innerHTML = nova_divida.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+</script>
+{% endblock extras_js %}

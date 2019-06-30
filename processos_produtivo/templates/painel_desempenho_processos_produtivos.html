@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'processos_produtivo:analise_desemp_processos_produtivos' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Analise</button></a>
+    <a href="{% url 'processos_produtivo:dashboard_processos' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<br>
+<br>
+  <!--Tabelas-->
+<div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Painel de Desempenho Processos Produtivos</h2>
+                    </div>
+      <table  class="table table-responsive "  >
+        <thead>
+            <th class="col-md-auto">
+                {% for ano_exercicio, ano in processos.ano_exercicio %}
+                <th><div class="table-responsive">
+                    <a href="/processos/{{request.user}}/{{ano | unlocalize}}">
+                    <span><input type="text" class="form-control" placeholder="{{ ano_exercicio   | unlocalize}}" readonly><a href="#" data-original-title="editar"></span>
+                    </a>
+                </div></th>
+
+                {% endfor %}        </thead>
+          <tr>
+                <td>Funcionarios</td>
+                {% for funcionarios, ano in processos.funcionarios %}
+                <td><input id="funcionarios{{ano | unlocalize}}" oninput="processos_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ funcionarios | floatformat:2 }}"></td>
+                {% endfor %}
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td>Volume produzido no ano </td>
+                {% for volume_produzido_no_ano, ano in processos.volume_produzido_no_ano %}
+                <td><input id="volume_produzido_no_ano{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ volume_produzido_no_ano| floatformat:2 }}"></td>
+                {% endfor %}
+             </tr>
+            <tr>
+                <td>Capacidade produtiva</td>
+                {% for capacidade_produzida, ano in processos.capacidade_produzida %}
+                <td><input id="capacidade_produzida{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ capacidade_produzida| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Refugo retrabalho</td>
+                {% for refugo_retrabalho, ano in processos.refugo_retrabalho %}
+                <td><input id="refugo_retrabalho{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ refugo_retrabalho| floatformat:2 }} %"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Custos de garantia </td>
+                {% for custos_garantia, ano in processos.custos_garantia %}
+                <td><input id="custos_garantia{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ custos_garantia| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Entrega no prazo</td>
+                {% for entregas_no_prazo, ano in processos.entregas_no_prazo %}
+                <td><input id="entregas_no_prazo{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ entregas_no_prazo| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Valor do estoque</td>
+                {% for valor_do_estoque, ano in processos.valor_do_estoque %}
+                <td><input id="valor_do_estoque{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ valor_do_estoque| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+
+
+
+                <td class="text-white">___________________________________________________________________________________________</td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+
+
+    </table>
+</div>
+
+<script type="text/javascript">
+              function dre_update(ano){
+    console.log(ano+' foi modificado.');
+    var ano_modificado = document.getElementById(ano);
+    ano_modificado.innerHTML = '<button type="button" onclick="save_processos_update('+ano+')" class="btn btn-success">' + ano + ' - Salvar' + '</button>';
+  };
+  function save_processos_update(ano){
+    var data = {};
+    fields = ['ano_exercicio' ,
+              'volume_produzido_no_ano' ,
+              'capacidade_produzida' ,
+              'refugo_retrabalho',
+              'custos_garantia' ,
+              'entregas_no_prazo' ,
+              'valor_do_estoque'
+    for (field of fields) {
+      str = document.getElementById(field+'_'+ano).value;
+      str = str.replace("R$ ", "");
+      str = str.replace("R$", "");
+      str = str.split('.').join("");
+      str = str.replace(",", ".");
+      console.log(field+"_"+ano);
+      data[field] = str;
+    };
+    $.ajax({
+      type: "POST",
+      url: './api/'+ano+'/',
+      data: data,
+      success: location.reload(true),
+    });
+  };
+
+</script>
+
+{% endblock content %}
+{% block extras_js%}
+<script>
+        $( ".moeda" ).keyup(function(event) {
+          if(event.which >= 37 && event.which <= 40){
+            event.preventDefault();
+          }
+
+          $(this).val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+              .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+            ;
+          });
+        });
+</script>
+{% endblock extras_js %}

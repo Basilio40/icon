@@ -1,0 +1,274 @@
+<<<<<<< HEAD
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<hr>
+<div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                      <div class="card-header bg-info text-white">
+                              <a href="{% url 'mapa:mapa_estrategico' user=request.user %}"><button class="btn  btn-primary shadow  mb-5  rounded" style=" margin-left:370px;width:300px;"><h4>Mapa Estratégico</h4></button></a>
+                                <h2 class="text-center">Vamos melhorar o desempenho hoje ?</h2>
+                    </div>
+   <div class="container">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="card-columns">
+                                        <div class="card border-light">
+                                            <div id="chart_div"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'objetivos:objetivo_de_receitas' user=request.user %}"><button class="btn  btn-primary shadow  mb-5  rounded" style="width: 200px;"><h4>Financeiro</h4></button></a>
+                                            </div>
+                                        </div>
+                         <div class="container">
+                                <div class="col-8">
+                                    <div class="card-columns">
+                                        <div class="card border-light">
+                                            <div id="chart_div2"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'vendas:mkt_relacionamento' user=request.user%}"><button class="btn  btn-primary  shadow  mb-5 rounded" style="width: 200px;"><h4>Vendas</h4></button></a>
+                                            </div>
+                                        </div>
+
+                        <div class="container"style="margin-left:210px;">
+                                <div class="col-8">
+                                    <div class="card-columns">
+                                        <div class="card border-light">
+                                            <div id="chart_div3"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'processos_produtivo:produtividade' user=request.user%}"><button class="btn  btn-primary  shadow  mb-5  rounded" style="width: 200px;"><h4>Processos</h4></button></a>
+                                            </div>
+                                        </div>
+                        <div class="container">
+                                <div class="col-8">
+                                    <div class="card-columns" style="margin-left:210px;">
+                                        <div class="card border-light">
+                                            <div id="chart_div4"></div>
+                                            <div class="card-body">
+                                                <a href="{% url 'pessoa:competencia' user=request.user%}"><button class="btn  btn-primary  shadow  mb-5  rounded" style="width: 200px;"><h4>Pessoas</h4></button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', {{porcentagem_gestao}}],
+        ]);
+
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 13000);
+        setInterval(function() {
+          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 5000);
+        setInterval(function() {
+          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+          chart.draw(data, options);
+        }, 26000);
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 13000);
+        setInterval(function() {
+          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 5000);
+        setInterval(function() {
+          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+          chart.draw(data, options);
+        }, 26000);
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div3'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 13000);
+        setInterval(function() {
+          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 5000);
+        setInterval(function() {
+          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+          chart.draw(data, options);
+        }, 26000);
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+        ]);
+
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div4'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 13000);
+        setInterval(function() {
+          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 5000);
+        setInterval(function() {
+          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+          chart.draw(data, options);
+        }, 26000);
+      }
+    </script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Gestão', 80],
+          ['Resultado', 55],
+        ]);
+
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div5'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 13000);
+        setInterval(function() {
+          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 5000);
+        setInterval(function() {
+          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+          chart.draw(data, options);
+        }, 26000);
+      }
+    </script>
+{% endblock extras_js %}
+

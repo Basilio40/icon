@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<hr>
+	  <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">O que vamos melhorar hoje ?</h2>
+                    </div>
+  <div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card-columns">
+                <div class="card border-light">
+                    <div id="chart_div"></div>
+                    <div class="card-body">
+                        <a href="{% url 'graficos:ped_diagnostico' user=request.user %}"><button class="btn  btn-primary shadow p-3 mb-5  rounded" style="width: 250px;"><h4>Diagnóstico</h4></button></a>
+                    </div>
+                </div>
+              <div class="card border-light">
+                <div id="chart_div1"></div>
+                    <div class="card-body bg-transparent">
+                        <a href="{% url 'graficos:ped_desempenho' user=request.user %}"><button class="btn  btn-primary  shadow p-3 mb-5  rounded" style="width: 250px;"><h4>Estratégia e Metas</h4></button></a>
+                    </div>
+                </div>
+                <div class="card border-light">
+                    <div id="chart_div2"></div>
+                    <div class="card-body">
+                        <a href="#"><button class="btn  btn-primary  shadow p-3 mb-5  rounded" style="width: 250px;"><h4>Gestão por Diretriz</h4></button></a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', {{porcentagem_diagnostico}}],
+
+        ]);
+
+        var options = {
+          width: 290, height: 290,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', {{porcentagem_estrategia}}],
+
+        ]);
+
+        var options = {
+          width: 290, height: 290,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
+
+        chart.draw(data, options);
+      }
+    </script>
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['', 80],
+
+        ]);
+
+        var options = {
+          width: 290, height: 290,
+          redFrom: 0, redTo: 34,
+          yellowFrom:34, yellowTo: 68,
+          greenFrom:68,greenTo:100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+          data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 13000);
+        setInterval(function() {
+          data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+          chart.draw(data, options);
+        }, 5000);
+        setInterval(function() {
+          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+          chart.draw(data, options);
+        }, 26000);
+      }
+    </script>
+{% endblock extras_js %}

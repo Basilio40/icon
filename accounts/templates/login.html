@@ -1,0 +1,60 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="">
+
+	<title>{% block title %}Sevilha{% endblock title %}</title>
+
+	<link href="{% static 'libs/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+
+	<style>
+	.bd-placeholder-img {
+		font-size: 1.125rem;
+		text-anchor: middle;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	@media (min-width: 768px) {
+		.bd-placeholder-img-lg {
+			font-size: 3.5rem;
+		}
+	}
+	</style>
+	<!-- Custom styles for this template -->
+	<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+
+
+</head>
+<body class="text-center">
+	<form class="form-signin" action="" method="post">
+		<input type="hidden" name="next" value="{{ next }}">
+	<img class="mb-4" src="{% static 'img/logo_sevilha_vetor_curva (1).png' %}" alt="" >
+			{% csrf_token %}
+			{{ form | crispy }}
+			<label>
+				<input type="checkbox" value="remember-me"> Lembrar minha senha
+			</label>
+		</div>
+		<button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">{{message}}Entrar</button>
+		<div class="text-center">
+		<br/>
+            <a href="{% url 'accounts:register' %}" class="text-center new-account">Criar uma conta</a>
+
+
+
+		</div>
+	</form>
+
+
+
+</body>
+</html>

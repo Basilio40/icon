@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+    <a href="{% url 'vendas:analise_desempenho_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Analise</button></a>
+    <a href="{% url 'vendas:dashboard_vendas' user=request.user%}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+    <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<br>
+<br>
+  <!--Tabelas-->
+<div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-info text-white">
+                        <h2 class="text-center">Painel de Desempenho Vendas & Marketing</h2>
+                    </div>
+      <table  class="table table-responsive "  >
+        <thead>
+        <tr >
+            <th class="col-md-auto">
+                {% for ano_exercicio, ano in vendas.ano_exercicio %}
+                <th><div class="table-responsive">
+                    <a href="/vendas/{{request.user}}/{{ano | unlocalize}}">
+                    <span><input type="text" class="form-control" placeholder="{{ ano_exercicio   | unlocalize}}" readonly><a href="#" data-original-title="editar"></span>
+                    </a>
+                </div></th>
+
+                {% endfor %}
+
+        </tr>
+        </thead>
+          <tr>
+                <th class="table-responsive">Carteira de clientes ativa</th>
+                {% for carteira_de_clientes_ativa, ano in vendas.carteira_de_clientes_ativa %}
+                <td><input id="carteira_de_clientes_ativa{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ carteira_de_clientes_ativa | floatformat:2 }}"></td>
+                {% endfor %}
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td>Novos clientes no ano</td>
+                {% for novos_clientes_no_ano, ano in vendas.novos_clientes_no_ano %}
+                <td><input id="novos_clientes_no_ano{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ novos_clientes_no_ano| floatformat:2 }}"></td>
+                {% endfor %}
+             </tr>
+            <tr>
+                <td>Propostas enviadas no ano</td>
+                {% for propostas_enviadas_no_ano, ano in vendas.propostas_enviadas_no_ano %}
+                <td><input id="propostas_enviadas_no_ano{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ propostas_enviadas_no_ano| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Notas fiscais emitidas</td>
+                {% for notas_fiscais_emitidas, ano in vendas.notas_fiscais_emitidas %}
+                <td><input id="notas_fiscais_emitidas{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ notas_fiscais_emitidas| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Clientes fidelizados</td>
+                {% for clientes_fidelizados, ano in vendas.clientes_fidelizados %}
+                <td><input id="clientes_fidelizados{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ clientes_fidelizados| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Reclamações clientes</td>
+                {% for reclamacoes_clientes, ano in vendas.reclamacoes_clientes %}
+                <td><input id="reclamacoes_clientes{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ reclamacoes_clientes| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Clientes perdidos</td>
+                {% for clientes_perdidos, ano in vendas.clientes_perdidos %}
+                <td><input id="clientes_perdidos{{ano | unlocalize}}" oninput="vendas_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value=" {{ clientes_perdidos| floatformat:2 }}"></td>
+                {% endfor %}
+            </tr>
+
+
+
+                <td class="text-white">___________________________________________________________________________________________</td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+
+
+    </table>
+</div>
+
+<script type="text/javascript">
+              function dre_update(ano){
+    console.log(ano+' foi modificado.');
+    var ano_modificado = document.getElementById(ano);
+    ano_modificado.innerHTML = '<button type="button" onclick="save_vendas_update('+ano+')" class="btn btn-success">' + ano + ' - Salvar' + '</button>';
+  };
+  function save_vendas_update(ano){
+    var data = {};
+    fields = ['ano_exercicio' ,
+                'carteira_de_clientes_ativa' ,
+                'novos_clientes_no_ano' ,
+                'propostas_enviadas_no_ano' ,
+                'notas_fiscais_emitidas',
+                'clientes_fidelizados' ,
+                'reclamacoes_clientes' ,
+                'clientes_perdidos' ,];
+    for (field of fields) {
+      str = document.getElementById(field+'_'+ano).value;
+      str = str.replace("R$ ", "");
+      str = str.replace("R$", "");
+      str = str.split('.').join("");
+      str = str.replace(",", ".");
+      console.log(field+"_"+ano);
+      data[field] = str;
+    };
+    $.ajax({
+      type: "POST",
+      url: './api/'+ano+'/',
+      data: data,
+      success: location.reload(true),
+    });
+  };
+
+</script>
+
+{% endblock content %}
+{% block extras_js%}
+<script>
+        $( ".moeda" ).keyup(function(event) {
+          if(event.which >= 37 && event.which <= 40){
+            event.preventDefault();
+          }
+
+          $(this).val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+              .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+            ;
+          });
+        });
+</script>
+{% endblock extras_js %}

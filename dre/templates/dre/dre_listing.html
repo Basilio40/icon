@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<br>
+<br>
+<br>
+
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+  <a href="{% url 'objetivos:analise_desempenho_financeiro' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Analise</button></a>
+  <a href="{% url 'graficos:grafico_dre' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Graficos</button></a>
+</div>
+<hr>
+<hr>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="overflow-auto">
+                <div class="card-header bg-info text-white">
+                  <h2 class="text-center">DRE – Demonstração do Resultado do Exercício</h2>
+                </div>
+    <table  class="table table-responsive ">
+        <thead>
+        <tr>
+            <th class="col-md-auto"></th>
+            {% for ano_exercicio, ano in dre.ano_exercicio %}
+            <th><div class="table responsive">
+              <a href="/dre/{{request.user}}/{{ano | unlocalize}}">
+                <span><input type="text" class="form-control" placeholder="{{ ano_exercicio   | unlocalize}}" readonly><a href="#" data-original-title="editar"></span>
+              </a>
+            </div></th>
+            {% endfor %}
+            <th></th>
+        </tr>
+        </thead>
+          <tr class="table-secondary ">
+                <th class="table-responsive">RECEITA BRUTA</th>
+                {% for receita_bruta, ano in dre.receita_bruta %}
+                <th><div ><span> R$ {{ receita_bruta |floatformat:2 }}</span></div></th>
+                {% endfor %}
+                <th></th>
+            </tr>
+            <tr >
+                <td><input type="text" class="form-control" placeholder="Receita de Seviço"></td>
+                {% for receita_servico, ano in dre.receita_servico %}
+                <td><input id="receita_servico_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" type="text" class="form-control moeda"  value="R$ {{ receita_servico |  floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="form-control" placeholder="Receita de Produto"></td>
+                {% for receita_produto, ano in dre.receita_produto %}
+                <td><input id="receita_produto_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{receita_produto | floatformat:2}}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="form-control" placeholder="Outras Receitas"></td>
+                {% for outras_receitas, ano in dre.outras_receitas %}
+                <td><input id="outras_receitas_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" type="text" value="R$ {{ outras_receitas  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr class="table-secondary ">
+                <td><b>Deduções sobre as receitas</b></td>
+                 {% for deducoes_receitas, ano in dre.deducoes_receitas %}
+                <th><div ><span>R$ {{ deducoes_receitas  | floatformat:2 }}</span></div></th>
+                {% endfor %}
+                <th></th>
+            </tr>
+            <tr>
+                <td><b><input type="text" class="form-control" placeholder="Impostos sobre as receitas"></b></td>
+                {% for imposto_sobre_receitas, ano in dre.imposto_sobre_receitas %}
+                <td><input id="imposto_sobre_receitas_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ imposto_sobre_receitas  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr class="table-secondary ">
+                <td><b>RECEITA LÍQUIDA</b></td>
+                {% for receita_liquida, ano in dre.receita_liquida %}
+                <th><div ><span>R$ {{ receita_liquida | floatformat:2 }}</span></div></th>
+                {% endfor %}
+                <th></th>
+            </tr>
+            <tr>
+                <td><b><input type="text" class="form-control" placeholder="Custos das mercadorias vendidas"></b></td>
+                {% for custo_das_mercadorias_vendidas, ano in dre.custo_das_mercadorias_vendidas %}
+                <td><input id="custo_das_mercadorias_vendidas_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ custo_das_mercadorias_vendidas  | floatformat:2}}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr>
+                <td><b><input type="text" class="form-control" placeholder="Custos dos Produtos Industrializados"></b></td>
+                {% for custo_dos_produtos_industrializados, ano in dre.custo_dos_produtos_industrializados %}
+                <td><input id="custo_dos_produtos_industrializados_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ custo_dos_produtos_industrializados  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+          <tr class="table-secondary ">
+                <td><b>CUSTOS</b></td>
+                {% for custo_total, ano in dre.custo_total %}
+                <th><div ><span>R$ {{ custo_total | floatformat:2 }}</span></div></th>
+                {% endfor %}
+                <td></td>
+           </tr>
+           <tr class="table-secondary ">
+                <td><b>LUCRO BRUTO</b></td>
+                {% for lucro_bruto, ano in dre.lucro_bruto %}
+                <th><div ><span>R$ {{ lucro_bruto | floatformat:2 }}</span></div></th>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr class="table-secondary ">
+                <td><b>Despesas Operacionais</b></td>
+                 {% for despesas_operacionais, ano in dre.despesas_operacionais %}
+                <th><div ><span>R$ {{ despesas_operacionais  | floatformat:2 }}</span></div></th>
+                {% endfor %}
+                <th></th>
+            </tr>
+            <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas com pessoal"></td>
+                {% for despesas_com_pessoal, ano in dre.despesas_com_pessoal %}
+                <td><input id="despesas_com_pessoal_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ despesas_com_pessoal  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas administrativas"></td>
+                {% for despesas_administrativas, ano in dre.despesas_administrativas %}
+                <td><input id="despesas_administrativas_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ despesas_administrativas  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+              <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas com ocupação"></td>
+                {% for despesas_ocupacao, ano in dre.despesas_ocupacao %}
+                <td><input id="despesas_ocupacao_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ despesas_ocupacao  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas com logistica"></td>
+                {% for despesas_logistica, ano in dre.despesas_logistica %}
+                <td><input id="despesas_logistica_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ despesas_logistica  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas com vendas"></td>
+                {% for despesas_vendas, ano in dre.despesas_vendas %}
+                <td><input id="despesas_vendas_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ despesas_vendas  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas com viagens"></td>
+                {% for despesas_viagens, ano in dre.despesas_viagens %}
+                <td><input id="despesas_viagens_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ despesas_viagens  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas com servicos de PJ"></td>
+                {% for despesas_servicos_pj, ano in dre.despesas_servicos_pj %}
+                <td><input id="despesas_servicos_pj_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ despesas_servicos_pj  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas tributarias"></td>
+                {% for despesas_tributarias, ano in dre.despesas_tributarias %}
+                <td><input id="despesas_tributarias_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ despesas_tributarias  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+          
+            <tr>
+                <td><input type="text" class="form-control" placeholder="Receitas Financeiras"></td>
+                {% for receitas_financeiras, ano in dre.receitas_financeiras %}
+                <td><input id="receitas_financeiras_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ receitas_financeiras  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas Financeiras"></td>
+                {% for despesas_financeiras, ano in dre.despesas_financeiras %}
+                <td><input id="despesas_financeiras_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ despesas_financeiras  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr class="table-secondary ">
+                <td><b>RESULTADO OPERACIONAL</b></td>
+                {% for lucro_operacional, ano in dre.lucro_operacional %}
+                <td><b>R$ {{ lucro_operacional | floatformat:2 }}</b></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Alienação de Ativo Fixo"></td>
+                {% for alienacao_ativo_fixo, ano in dre.alienacao_ativo_fixo %}
+                <td><input id="alienacao_ativo_fixo_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ alienacao_ativo_fixo  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Despesas Indedutíveis"></td>
+                {% for despesas_indedutiveis, ano in dre.despesas_indedutiveis %}
+                <td><input id="despesas_indedutiveis_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" value="R$ {{ despesas_indedutiveis  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+              <tr class="table-secondary">
+                <td><b>LUCRO LÍQ. ANTES IR CS</b></td>
+                {% for lucro_liquido, ano in dre.lucro_liquido %}
+                <td><b>R$ {{ lucro_liquido | floatformat:2 }}</b></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr >
+                <td><b><input type="text" class="form-control" placeholder="IRPJ E CSLL"></b></td>
+                {% for irpj_e_csll, ano in dre.irpj_e_csll %}
+                <td><input id="irpj_e_csll_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ irpj_e_csll  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr class="table-secondary">
+                <td><b>RESULTADO LÍQUIDO DO EXERCÍCIO</b></td>
+                {% for resultado_exercicio, ano in dre.resultado_exercicio %}
+                <td><b>R$ {{ resultado_exercicio | floatformat:2 }}</b></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+        <tbody>
+           
+            <tr class="table-secondary ">
+                <td><b>EBITDA</b></td>
+                {% for ebitda, ano in dre.ebitda %}
+                <td><b>R$ {{ ebitda | floatformat:2 }}</b></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr >
+                <td><b><input type="text" class="form-control" placeholder="Depreciação e Amortização"></b></td>
+                {% for depreciacao_amortizacao, ano in dre.depreciacao_amortizacao %}
+                <td><input id="depreciacao_amortizacao_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ depreciacao_amortizacao  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr class="table-secondary ">
+                <td><b>EBIT</b></td>
+                {% for ebit, ano in dre.ebit %}
+                <td><b>R$ {{ ebit | floatformat:2 }}</b></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Equivalente Patrimonial"></td>
+                {% for equivalente_patrimonial, ano in dre.equivalente_patrimonial %}
+                <td><input id="equivalente_patrimonial_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ equivalente_patrimonial  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             
+             <tr >
+                <td><input type="text" class="form-control" placeholder="Restituição Correção Monetária"></td>
+                {% for restituicao_correcao_monetaria, ano in dre.restituicao_correcao_monetaria %}
+                <td><input id="restituicao_correcao_monetaria_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ restituicao_correcao_monetaria  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+          
+            <tr>
+                <td><input type="text" class="form-control" placeholder="Endividamento"></td>
+                {% for endividamento, ano in dre.endividamento %}
+                <td><input id="endividamento_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ endividamento  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+             <tr>
+                <td><input type="text" class="form-control" placeholder="Inadimplencia"></td>
+                {% for inadimplencia, ano in dre.inadimplencia %}
+                <td><input id="inadimplencia_{{ano | unlocalize}}" oninput="dre_update('{{ano | unlocalize}}')" class="form-control moeda" step="0.01" value="R$ {{ inadimplencia  | floatformat:2 }}"></td>
+                {% endfor %}
+                <td></td>
+            </tr>
+            <tr>
+                <hr>
+                <td></td>
+                {% for id in dre.id %}
+                <td id="{{ id | unlocalize }}">
+                  <button type="button" class="btn btn-default">{{ id | unlocalize }}</button>
+                </td>
+                {% endfor %}
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+                  <a href="{% url 'graficos:grafico_dre' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Salvar</button></a>
+</div>
+            <!-- pagination -->
+            {% include 'partials/paginator.html' %}
+
+            </div><!-- col-md-12 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+<script type="text/javascript">
+  function dre_update(ano){
+    console.log(ano+' foi modificado.');
+    var ano_modificado = document.getElementById(ano);
+    ano_modificado.innerHTML = '<button type="button" onclick="save_dre_update('+ano+')" class="btn btn-success">' + ano + ' - Salvar' + '</button>';
+  };
+  function save_dre_update(ano){
+    var data = {};
+    fields = ['receita_servico','receita_produto','outras_receitas','imposto_sobre_receitas','custo_das_mercadorias_vendidas','custo_dos_produtos_industrializados','despesas_com_pessoal', 'despesas_administrativas','despesas_ocupacao','despesas_logistica',
+                'despesas_vendas','despesas_viagens','despesas_servicos_pj','despesas_tributarias', 'receitas_financeiras', 'despesas_financeiras', 'despesas_indedutiveis', 'alienacao_ativo_fixo',  'depreciacao_amortizacao','equivalente_patrimonial', 'irpj_e_csll',
+                'restituicao_correcao_monetaria', 'endividamento', 'inadimplencia'];
+    for (field of fields) {
+      str = document.getElementById(field+'_'+ano).value;
+      str = str.replace("R$ ", "");
+      str = str.replace("R$", "");
+      str = str.split('.').join("");
+      str = str.replace(",", ".");
+      console.log(field+"_"+ano);
+      data[field] = str;
+    };
+    $.ajax({
+      type: "POST",
+      url: './api/'+ano+'/',
+      data: data,
+      success: location.reload(true),
+    });
+  };
+
+</script>
+
+{% endblock content %}
+
+{% block extras_js %}
+<script>
+        $( ".moeda" ).keyup(function(event) {
+          if(event.which >= 37 && event.which <= 40){
+            event.preventDefault();
+          }
+
+          $(this).val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/([0-9])([0-9]{2})$/, '$1,$2')  
+              .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+            ;
+          });
+        });
+</script>
+{% endblock extras_js %}

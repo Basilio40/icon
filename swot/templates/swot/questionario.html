@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load l10n %}
+<!--Grafico-->
+
+<br>
+<br>
+<hr>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2"></div>
+<div class="btn-group mr-2">
+  <a href="{% url 'graficos:diagnostico_amb_int' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Anterior</button></a>
+  <a href="{% url 'swot:swot_concorrencia' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Próximo</button></a>
+  <a href="{% url 'graficos:ped_diagnostico' user=request.user %}" class="href"><button type="button" class="btn btn-sm btn-outline-info">Menu</button></a>
+</div>
+<hr>
+
+  <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="overflow-auto">
+                      <div class="card-header bg-secondary text-white">
+                        <h2 class="text-center">Questionário</h2>
+                     </div>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col"><h4></h4></th>
+      <th scope="col">Sim</th>
+      <th scope="col">+/-</th>
+      <th scope="col">Não</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for questao, resposta in questionario %}
+    <tr>
+      <th><p class="font-weight-light">{{questao.texto}}</p></th>
+      {% if resposta.resposta == 'Sim' %}
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='Sim' checked></td>
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='+/-'></td>
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='Não'></td>
+      {% elif resposta.resposta == '+/-'%}
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='Sim'></td>
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='+/-' checked></td>
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='Não'></td>
+      {% else %}
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='Sim'></td>
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='+/-'></td>
+        <td><input oninput="preencher({{questao.pk}})" type="radio" name='questao_{{questao.pk}}' style="width:30px" value='Não' checked></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</div>
+{% endblock content %}
+
+{% block extras_js %}
+<script type="text/javascript">
+  function preencher(pk){
+    var data = {};
+    data['questao'] = pk;
+    data['resposta'] = document.querySelector('input[name="questao_' + pk + '"]:checked').value
+
+    $.ajax({
+      type: "POST",
+      url: './salvar/',
+      data: data
+    });
+  };
+</script>
+{% endblock extras_js %}

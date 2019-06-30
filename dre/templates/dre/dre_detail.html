@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load l10n %}
+
+    <div class="row">
+        <div class="col-md-12">
+          <hr>
+          <br>
+        <table>
+          <thead>
+          <tr>
+              <th><div class="table responsive">
+                <span><h2>DRE do ano de {{ dre.ano_exercicio }}</h2><a href="#" data-original-title="editar"></span>
+              </div></th>
+              <th>
+                <div align=center>
+                  <a href="./edit"><button type="button" class="btn btn-info">Editar</button></a>
+                  <a href="./delete"><button type="button" class="btn btn-danger">Excluir</button></a>
+                </div>
+              </th>
+          </tr>
+          </thead>
+            <tr class="table-secondary ">
+                  <th class="table-responsive">RECEITA BRUTA</th>
+                  <th><div><span>{{ dre.receita_bruta | floatformat:2}}</span></div></th>
+              </tr>
+              <tr >
+                  <td><input type="text" class="form-control" placeholder="Receita de Seviço"></td>
+                  <td><input class="form-control" step="0.01" step="0.01" value="{{ dre.receita_servico | floatformat:2 }}"></td>
+              </tr>
+              <tr>
+                  <td><input type="text" class="form-control" placeholder="Receita de Produto"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.receita_produto | floatformat:2 }}"></td>
+              </tr>
+              <tr>
+                  <td><input type="text" class="form-control" placeholder="Outras Receitas"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.outras_receitas  | floatformat:2 }}"></td>
+              </tr>
+              <tr>
+                  <td><b><input type="text" class="form-control" placeholder="Impostos sobre as receitas"></b></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.imposto_sobre_receitas  | floatformat:2 }}"></td>
+              </tr>
+              <tr class="table-secondary ">
+                  <td><b>RECEITA LÍQUIDA</b></td>
+                  <th><div ><span>{{ dre.receita_liquida }}</span></div></th>
+              </tr>
+              <tr>
+                  <td><b><input type="text" class="form-control" placeholder="Custos das Mercadorias Vendidas"></b></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.custo_das_mercadorias_vendidas  | floatformat:2 }}"></td>
+              </tr>
+              <tr>
+                  <td><b><input type="text" class="form-control" placeholder="Custos dos Produtos Industrializados"></b></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.custo_dos_produtos_industrializados  | floatformat:2 }}"></td>
+              </tr>
+              
+            <tr class="table-secondary ">
+                  <td><b>CUSTOS</b></td>
+                  <th><div ><span>{{ dre.custo_total | floatformat:2 }}</span></div></th>
+             </tr>
+             <tr class="table-secondary ">
+                  <td><b>LUCRO BRUTO</b></td>
+                  <th><div ><span>{{ dre.lucro_bruto | floatformat:2 }}</span></div></th>
+              </tr>
+              <tr>
+                  <td><input type="text" class="form-control" placeholder="Despesas Operacionais"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.despesas_operacionais  | floatformat:2 }}"></td>
+              </tr>
+          <tbody>
+              
+              <tr class="table-secondary ">
+                  <td><b>EBITDA</b></td>
+                  <td><b>{{ dre.ebitda | floatformat:2}}</b></td>
+              </tr>
+              <tr >
+                  <td><b><input type="text" class="form-control" placeholder="Depreciação e Amortização"></b></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.depreciacao_amortizacao  | floatformat:2 }}"></td>
+              </tr>
+              <tr class="table-secondary ">
+                  <td><b>EBIT</b></td>
+                  <td><b>{{ dre.ebit | floatformat:2}}</b></td>
+              </tr>
+             <!--  <tr class="table-secondary ">
+                  <td><b>RDD</b></td>
+                  <td><b>{{ dre.rdd }}</b></td>
+              </tr> -->
+               <tr class="table-secondary ">
+                  <td><b>LUCRO OPERACIONAL</b></td>
+                  <td><b>{{ dre.lucro_operacional | floatformat:2 }}</b></td>
+              </tr>
+               <tr>
+                  <td><input type="text" class="form-control" placeholder="Receitas Financeiras"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.receitas_financeiras  | floatformat:2 }}"></td>
+              </tr>
+               <tr >
+                  <td><input type="text" class="form-control" placeholder="Despesas Financeiras"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.despesas_financeiras  | floatformat:2 }}"></td>
+              </tr>
+               
+              <tr class="table-secondary">
+                  <td><b>LUCRO LÍQ. ANTES IR CS</b></td>
+                  <td><b>{{ dre.lucro_liquido | floatformat:2 }}</b></td>
+              </tr>
+              <tr>
+                  <td><input type="text" class="form-control" placeholder="Endividamento"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.endividamento  | unlocalize }}"></td>
+              </tr>
+              <tr>
+                  <td><input type="text" class="form-control" placeholder="Inadimplência"></td>
+                  <td><input class="form-control" step="0.01" value="{{ dre.inadimplencia  | unlocalize }}"></td>
+              </tr>
+              <tr>
+                  <hr>
+                  <td></td>
+                  <td></td>
+              </tr>
+          </tbody>
+      </table>
+      <hr>
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
+
+{% endblock content %}
