@@ -473,12 +473,14 @@ def diagnostico_amb_ext(request, user):
     concorrentes = Concorrente.objects.filter(user=owner)
     clientes = Cliente.objects.filter(user=owner)
     fornecedores = Fornecedor.objects.filter(user=owner)
+    analise_macro = AnalisesMacro.objects.get_or_create(user=owner)[0]
 
     analise = AnaliseConcorrencia.objects.get_or_create(user=owner)[0]
 
     concorrentes_p = pontuacao_ext_concorrentes(concorrentes)
     clientes_p = pontuacao_ext_clientes(clientes)
     fornecedor_p = pontuacao_ext_fornecedor(fornecedores)
+    analise_p = pontuacao_macro_ambiente(analise_macro)
 
     porcentagem_sobrevivencia = len(respostas) * (30/len(questoes))
     if pontos_respostas > 0:
@@ -486,7 +488,8 @@ def diagnostico_amb_ext(request, user):
     dicio_retorno = {'porcentagem_sobrevivencia': int(porcentagem_sobrevivencia),
                      'concorrencia': concorrentes_p,
                      'clientes': clientes_p,
-                     'fornecedores': fornecedor_p}
+                     'fornecedores': fornecedor_p,
+                     'analise': analise_p}
     return render(request, 'graficos/diagnostico_amb_ext.html', dicio_retorno)
 
 @login_required

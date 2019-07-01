@@ -686,7 +686,7 @@ class Macro ( models.Model ):
         return 'Macros {} do {}.'.format ( self.macro, self.user )
 
 
-class AnalisesMacro ( models.Model ):
+class AnalisesMacro( models.Model ):
     SETAS_CHOICE = (
         ('Cima', 'Cima'),
         ('Meio', 'Meio'),

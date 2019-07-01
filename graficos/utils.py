@@ -62,3 +62,26 @@ def pontuacao_ext_fornecedor(fornecedores):
             pass
     competitividade['media'] = competitividade_media / 5
     return competitividade['media']
+
+def pontuacao_macro_ambiente(analise):
+    pontuacao = 0
+    p_objetivo = 0
+    p_ameaca = 0
+    for i in range(1, 6):
+        p = 0
+        p = eval("(get_p(analise.objetivo_"+ str(i) + "_atratividade) + get_p(analise.objetivo_" + str(i) +"_probabilidade)) / 2")
+        p_objetivo += p
+        p = eval("(get_p(analise.ameaca_"+ str(i) + "_relevancia) + get_p(analise.ameaca_" + str(i) +"_probabilidade)) / 2")
+        p_ameaca += p
+    p_objetivo = p_objetivo * 10
+    p_ameaca = p_ameaca * 10
+    pontuacao = (p_objetivo + p_ameaca)/2
+    return pontuacao
+
+def get_p(choice):
+	if choice == 'Cima':
+		return 2
+	elif choice == 'Meio':
+		return 1
+	else:
+		return 0
