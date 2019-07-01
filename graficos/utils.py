@@ -1,4 +1,4 @@
-from swot.models import Concorrente, AnaliseConcorrencia, Cliente, Fornecedor
+from swot.models import Concorrente, AnaliseConcorrencia, Cliente, Fornecedor, AnalisesMacro
 from swot.utils import *
 def calcula_smile_points(smile):
     if smile == "Ruim":
@@ -85,3 +85,16 @@ def get_p(choice):
 		return 1
 	else:
 		return 0
+
+def pontuacao_ext(owner):
+    concorrentes = Concorrente.objects.filter(user=owner)
+    clientes = Cliente.objects.filter(user=owner)
+    fornecedores = Fornecedor.objects.filter(user=owner)
+    analise_macro = AnalisesMacro.objects.get_or_create(user=owner)[0]
+
+    concorrentes_p = pontuacao_ext_concorrentes(concorrentes)
+    clientes_p = pontuacao_ext_clientes(clientes)
+    fornecedor_p = pontuacao_ext_fornecedor(fornecedores)
+    analise_p = pontuacao_macro_ambiente(analise_macro)
+
+    return (concorrentes_p + clientes_p + fornecedor_p + analise_p)/4

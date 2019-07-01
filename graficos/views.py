@@ -445,8 +445,9 @@ def ped_diagnostico(request, user):
     porcentagem_sobrevivencia += (pontos_respostas) / len(questoes) * 100 / 3.23
 
 
-    dicio_retorno = {'porcentagem_financeiro': porcentagem_financeiro,
-                     'porcentagem_sobrevivencia': int(porcentagem_sobrevivencia)}
+    dicio_retorno = {'ambiente_externo': int(pontuacao_ext(owner)),
+                    'porcentagem_financeiro': porcentagem_financeiro,
+                    'porcentagem_sobrevivencia': int(porcentagem_sobrevivencia)}
     return render(request, 'graficos/ped1_0.html', dicio_retorno)
 
 @login_required
