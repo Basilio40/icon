@@ -503,76 +503,10 @@ def diagnostico_amb_int(request, user):
     total_preenchimento = 0
     total_smile_points = 0
 
-    # Verifica objetivos de receitas
-    # Espera-se um range de -3/3 smiles points
-    try:
-        objetivo = ObjetivoReceitas.objects.get(dre_base=dre)
-        analise_objetivo = AnaliseObjetivoReceitas.objects.get(objetivo_receitas_base=objetivo)
-        total_preenchimento += 1
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_receita_bruta)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_crescimento_quatro)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_crescimento)
-    except:
-        pass
-
-    # Verifica objetivos de rentabilidade
-    # Espera-se um range de -6/6 smile points
-    try:
-        objetivo = ObjetivoRentabilidade.objects.get(dre_base=dre)
-        analise_objetivo = AnaliseObjetivoRentabilidade.objects.get(objetivo_rentabilidade_base=objetivo)
-        total_preenchimento += 1
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_lucro_liquido)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_rentabilidade_media)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_rentabilidade_ultimo)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_rentabilidade_comparada)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_ebitda_medio)
-        total_smile_points += calcula_smile_points(analise_objetivo.smile_ebitda_ultimo)
-    except:
-        pass
-
-    # Verifica objetivos de endividamento
-    # Espera-se um range de -3/3 smiles points
-    try:
-        objetivo = ObjetivoEndividamentos.objects.get(dre_base=dre)
-        analise_objetivo = AnaliseObjetivoEndividamento.objects.get(objetivo_endividamento_base=objetivo)
-        total_preenchimento += 1
-        total_smile_points += calcula_smile_points(smile_divida)
-        total_smile_points += calcula_smile_points(smile_taxa_divida_lucro)
-        total_smile_points += calcula_smile_points(smile_inadimplencia)
-    except:
-        pass
-
-    porcentagem_financeiro = 1
-    porcentagem_financeiro += 9 * total_preenchimento
-    if total_smile_points > 0:
-        porcentagem_financeiro += 6 * total_smile_points
-
-    questoes = Questao.objects.all()
-    respostas = []
-    pontos_respostas = 0
-    for questao in questoes:
-        try:
-            resposta = Resposta.objects.get(questao=questao, user=owner)
-            respostas.append(resposta)
-            if resposta.resposta == 'Sim':
-                pontos_respostas += 1
-            elif resposta.resposta == 'Não':
-                pontos_respostas -= 1
-            else:
-                pass
-        except:
-            pass
-    porcentagem_sobrevivencia = len(respostas) * (30/len(questoes))
-    if pontos_respostas > 0:
-        porcentagem_sobrevivencia += pontos_respostas * (70/len(questoes))
-
-    p_s = 0
-    if porcentagem_sobrevivencia < 30:
-        p_s = porcentagem_sobrevivencia
-    elif porcentagem_sobrevivencia < 70:
-        p_s = porcentagem_sobrevivencia - 30
-    else:
-        p_s = porcentagem_sobrevivencia - 70
+    porcentagem_financeiro = porcent_fin(dre)
+    porcentagem_vendas = porcen_vend(owner)
+    porcentagem_processos = porcen_process(owner)
+    porcentagem_pessoas = porcen_pessoa(owner)
 
     pf = 0
     if porcentagem_financeiro < 30:
@@ -582,5 +516,5 @@ def diagnostico_amb_int(request, user):
     else:
         pf = porcentagem_financeiro - 70
 
-    dicio_retorno = {'porcentagem_sobrevivencia': int(porcentagem_sobrevivencia), 'porcentagem_financeiro': porcentagem_financeiro, 'ps': p_s, 'pf': pf}
+    dicio_retorno = {'porcentagem_financeiro': porcentagem_financeiro, 'pf': pf, 'pv': porcentagem_vendas, 'pp': porcentagem_processos, 'ppessoas': porcentagem_pessoas}
     return render(request, 'graficos/diagnostico_amb_int.html', dicio_retorno)
